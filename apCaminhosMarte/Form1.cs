@@ -15,6 +15,7 @@ namespace apCaminhosMarte
     {
         Arvore<Cidade> arvore;
         List<Cidade> listaCidade;
+        List<Caminho> listaCaminho;
         public Form1()
         {
             InitializeComponent();
@@ -27,30 +28,92 @@ namespace apCaminhosMarte
 
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Buscar caminhos entre cidades selecionadas");
+            if (lsbOrigem.SelectedIndex == -1)
+                MessageBox.Show("Selecione a cidade de origem!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if(lsbDestino.SelectedIndex == -1)
+                MessageBox.Show("Selecione a cidade de destino!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            String[] cidades = new String[7]{"Acheron", "Arena", "Arrakeen", "Bakhuysen", "Bradburry", "Burroughs", "Cairo"};
+            String cidadeOrigem = cidades[lsbOrigem.SelectedIndex];
+            String cidadeDestino = cidades[lsbDestino.SelectedIndex];
+            int idOrigem = -1, idDestino = -1;
+
+            foreach(Cidade c in listaCidade) {
+                if (c.Nome.Equals(cidadeOrigem))
+                    idOrigem = c.Id;
+
+                else if (c.Nome.Equals(cidadeDestino))
+                    idDestino = c.Id;
+
+                if (idOrigem != -1 && idDestino != -1)
+                    break;
+            }            
+            buscarCaminhos(idOrigem, idDestino);
+        }
+
+        private int[,] montarMatrizAdjacencia()
+        {            
+            int qtdCidades = listaCidade.Count;
+            int[,] matriz = new int[qtdCidades, qtdCidades];
+
+            for(int i = 0; i<matriz.Length;i++)
+
+            return matriz;
+
+        }
+
+        private void buscarCaminhos(int idOrigem, int idDestino)
+        {
+          
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            StreamReader lerArvore = new StreamReader("CidadesMarte.txt");
+            LerArquivos();
+        }
+
+        private void LerArquivos()
+        {
+            lerCidades();
+            lerCaminhos();
+        }
+
+        private void lerCaminhos()
+        {
+            StreamReader leitor = new StreamReader("CaminhosEntreCidadesMarte.txt");
+            listaCaminho = new List<Caminho>();
+            while (!leitor.EndOfStream)
+            {
+                String linha = leitor.ReadLine();
+                int idCidadeOrigem = int.Parse(linha.Substring(0, 4).Trim());
+                int idCidadeDestino = int.Parse(linha.Substring(4, 3).Trim());
+                int distancia = int.Parse(linha.Substring(7, 6).Trim());
+                int tempo = int.Parse(linha.Substring(13, 4).Trim());
+                int custo = int.Parse(linha.Substring(17, 3).Trim());
+
+                Caminho caminho = new Caminho(idCidadeOrigem, idCidadeDestino, distancia, tempo, custo);
+                listaCaminho.Add(caminho);
+            }
+        }
+
+        private void lerCidades()
+        {
+            StreamReader leitor = new StreamReader("CidadesMarte.txt");
             arvore = new Arvore<Cidade>();
             listaCidade = new List<Cidade>();
-            while(!lerArvore.EndOfStream)
+            while (!leitor.EndOfStream)
             {
-                String linha = lerArvore.ReadLine();
+                String linha = leitor.ReadLine();
                 int idCidade = int.Parse(linha.Substring(0, 3).Trim());
                 String nome = linha.Substring(3, 16).Trim();
-                int cordenadaX = int.Parse(linha.Substring(19, 5).Trim());
-                int cordenadaY = int.Parse(linha.Substring(24, 4).Trim());
-                Cidade novaCidade = new Cidade(idCidade, nome, cordenadaX, cordenadaY);
+                int coordenadaX = int.Parse(linha.Substring(19, 5).Trim());
+                int coordenadaY = int.Parse(linha.Substring(24, 4).Trim());
+                Cidade novaCidade = new Cidade(idCidade, nome, coordenadaX, coordenadaY);
                 listaCidade.Add(novaCidade);
                 Console.WriteLine(novaCidade);
                 arvore.Incluir(novaCidade);
             }
-
-
         }
-
         private void pbMapa_Paint(object sender, PaintEventArgs e)
         {
             double xProporcional = 4096.00 / pbMapa.Width;
