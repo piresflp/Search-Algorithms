@@ -18,3 +18,13 @@ C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\obj\Debug\apCamin
 C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\obj\Debug\apCaminhosMarte.csproj.CoreCompileInputs.cache
 C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\obj\Debug\apCaminhosMarte.exe
 C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\obj\Debug\apCaminhosMarte.pdb
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\bin\Debug\apCaminhosMarte.exe.config
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\bin\Debug\apCaminhosMarte.exe
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\bin\Debug\apCaminhosMarte.pdb
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\obj\Debug\apCaminhosMarte.csprojAssemblyReference.cache
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\obj\Debug\apCaminhosMarte.Form1.resources
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\obj\Debug\apCaminhosMarte.Properties.Resources.resources
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\obj\Debug\apCaminhosMarte.csproj.GenerateResource.cache
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\obj\Debug\apCaminhosMarte.csproj.CoreCompileInputs.cache
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\obj\Debug\apCaminhosMarte.exe
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\obj\Debug\apCaminhosMarte.pdb

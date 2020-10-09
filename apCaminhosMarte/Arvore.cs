@@ -15,6 +15,35 @@ namespace apCaminhosMarte
         public NoArvore<Dado> Atual { get => atual; set => atual = value; }
         public NoArvore<Dado> Antecessor { get => antecessor; set => antecessor = value; }
 
+        public void Incluir(Dado dadoLido)
+        {
+            Incluir(ref raiz, dadoLido);
+        }
+        private void Incluir(ref NoArvore<Dado> atual, Dado dadoLido)
+        {
+            if (atual == null)
+            {
+                atual = new NoArvore<Dado>(dadoLido);
+            }
+            else
+            if (dadoLido.CompareTo(atual.Info) == 0)
+                throw new Exception("Já existe esse registro!");
+            else
+            if (dadoLido.CompareTo(atual.Info) > 0)
+            {     
+                NoArvore<Dado> apDireito = atual.Dir;
+                Incluir(ref apDireito, dadoLido);
+                atual.Dir = apDireito;
+            }
+            else
+            {
+                NoArvore<Dado> apEsquerdo = atual.Esq;
+                Incluir(ref apEsquerdo, dadoLido);
+
+                atual.Esq = apEsquerdo;
+            }
+        }
+
         public void DesenharArvore(bool primeiraVez, NoArvore<Cidade> raiz, int x, int y, double angulo, double incremento, double comprimento, Graphics g)
         {
             int xf, yf;
@@ -30,10 +59,10 @@ namespace apCaminhosMarte
                 incremento * 0.60, comprimento * 0.8, g);
                 DesenharArvore(false, raiz.Dir, xf, yf, Math.PI / 2 - incremento,
                 incremento * 0.60, comprimento * 0.8, g);
-                SolidBrush preenchimento = new SolidBrush(Color.Blue);
-                g.FillEllipse(preenchimento, xf - 25, yf - 15, 42, 30);
-                g.DrawString(Convert.ToString(raiz.Info.ToString()), new Font("Comic Sans", 10),
-                new SolidBrush(Color.Yellow), xf - 23, yf - 7);
+                SolidBrush preenchimento = new SolidBrush(Color.Black);
+                g.FillEllipse(preenchimento, xf - 25, yf - 15, 60, 30);
+                g.DrawString(Convert.ToString(raiz.Info.ToString()), new Font("Comic Sans", 7),
+                new SolidBrush(Color.LightGray), xf - 23, yf - 7);
             }
         }
     }

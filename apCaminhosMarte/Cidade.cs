@@ -26,12 +26,13 @@ namespace apCaminhosMarte
 
         public int CompareTo(Cidade other)
         {
-            throw new NotImplementedException();
+            return this.id - other.id;
         }
 
         public override string ToString()
         {
-            return "Id " + this.id + "; Nome: " + this.nome + "; CoordenadaX: " + this.coordenadaX + "; CoordenadaY: "+this.coordenadaY;
+            //return "Id " + this.id + "; Nome: " + this.nome + "; CoordenadaX: " + this.coordenadaX + "; CoordenadaY: "+this.coordenadaY;
+            return "" + this.id + " " + this.nome;
         }
     }
 }
