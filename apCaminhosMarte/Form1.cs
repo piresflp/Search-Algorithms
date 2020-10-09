@@ -46,15 +46,18 @@ namespace apCaminhosMarte
             buscarCaminhos(idOrigem, idDestino);
         }
 
-        private int[,] montarMatrizAdjacencia()
+        private Caminho[,] montarMatrizAdjacencia()
         {            
-            int qtdCidades = listaCidades.Count;
-            int[,] matriz = new int[qtdCidades, qtdCidades];
+            int qtdCidades = listaCidades.Count - 1;
+            Caminho[,] matriz = new Caminho[qtdCidades, qtdCidades];
 
-            for(int i = 0; i < matriz.Length; i++) { }
-
+            for(int i = 0; i < qtdCidades; i++) 
+                for(int j = 0; j < qtdCidades; j++)                
+                    foreach(Caminho c in listaCaminhos)                    
+                        if (c.IdCidadeOrigem == i && c.IdCidadeDestino == j)
+                            matriz[i, j] = c;                    
+        
             return matriz;
-
         }
 
         private void buscarCaminhos(int idOrigem, int idDestino)
@@ -75,8 +78,7 @@ namespace apCaminhosMarte
             arvore = Leitor.lerCidades();
             listaCidades = arvore.getListaOrdenada();
             listaCaminhos = Leitor.lerCaminhos();
-        }      
-
+        }    
         
         private void pbMapa_Paint(object sender, PaintEventArgs e)
         {
