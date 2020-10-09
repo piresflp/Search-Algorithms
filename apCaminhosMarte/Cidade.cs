@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace apCaminhosMarte
 {
-    class Cidade : IComparable<Cidade>
+    class Cidade : IComparable<Cidade>, ICloneable
     {
         private int id, coordenadaX, coordenadaY;
         private string nome;
@@ -33,6 +33,26 @@ namespace apCaminhosMarte
         {
             //return "Id " + this.id + "; Nome: " + this.nome + "; CoordenadaX: " + this.coordenadaX + "; CoordenadaY: "+this.coordenadaY;
             return "" + this.id + " " + this.nome;
+        }
+
+        public Cidade(Cidade modelo) 
+        {
+            this.Id = modelo.Id;
+            this.Nome = modelo.Nome;
+            this.CoordenadaX = modelo.coordenadaX;
+            this.coordenadaY = modelo.coordenadaY;
+        }
+
+        public Object Clone()
+        {
+            Cidade ret = null;
+            try
+            {
+                ret = new Cidade(this);
+            }
+            catch (Exception e) { }
+
+            return ret;
         }
     }
 }

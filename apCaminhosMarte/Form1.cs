@@ -14,16 +14,11 @@ namespace apCaminhosMarte
     public partial class Form1 : Form
     {
         Arvore<Cidade> arvore;
-        List<Cidade> listaCidade;
-        List<Caminho> listaCaminho;
+        List<Cidade> listaCidades;
+        List<Caminho> listaCaminhos;
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void TxtCaminhos_DoubleClick(object sender, EventArgs e)
-        {
-           
         }
 
         private void BtnBuscar_Click(object sender, EventArgs e)
@@ -38,7 +33,7 @@ namespace apCaminhosMarte
             String cidadeDestino = cidades[lsbDestino.SelectedIndex];
             int idOrigem = -1, idDestino = -1;
 
-            foreach(Cidade c in listaCidade) {
+            foreach(Cidade c in listaCidades) {
                 if (c.Nome.Equals(cidadeOrigem))
                     idOrigem = c.Id;
 
@@ -53,10 +48,10 @@ namespace apCaminhosMarte
 
         private int[,] montarMatrizAdjacencia()
         {            
-            int qtdCidades = listaCidade.Count;
+            int qtdCidades = listaCidades.Count;
             int[,] matriz = new int[qtdCidades, qtdCidades];
 
-            for(int i = 0; i<matriz.Length;i++)
+            for(int i = 0; i < matriz.Length; i++) { }
 
             return matriz;
 
@@ -68,57 +63,26 @@ namespace apCaminhosMarte
         }
 
         private void Form1_Load(object sender, EventArgs e)
-        {
+        {   
             LerArquivos();
         }
 
         private void LerArquivos()
         {
-            lerCidades();
-            lerCaminhos();
-        }
-
-        private void lerCaminhos()
-        {
-            StreamReader leitor = new StreamReader("CaminhosEntreCidadesMarte.txt");
-            listaCaminho = new List<Caminho>();
-            while (!leitor.EndOfStream)
-            {
-                String linha = leitor.ReadLine();
-                int idCidadeOrigem = int.Parse(linha.Substring(0, 4).Trim());
-                int idCidadeDestino = int.Parse(linha.Substring(4, 3).Trim());
-                int distancia = int.Parse(linha.Substring(7, 6).Trim());
-                int tempo = int.Parse(linha.Substring(13, 4).Trim());
-                int custo = int.Parse(linha.Substring(17, 3).Trim());
-
-                Caminho caminho = new Caminho(idCidadeOrigem, idCidadeDestino, distancia, tempo, custo);
-                listaCaminho.Add(caminho);
-            }
-        }
-
-        private void lerCidades()
-        {
-            StreamReader leitor = new StreamReader("CidadesMarte.txt");
             arvore = new Arvore<Cidade>();
-            listaCidade = new List<Cidade>();
-            while (!leitor.EndOfStream)
-            {
-                String linha = leitor.ReadLine();
-                int idCidade = int.Parse(linha.Substring(0, 3).Trim());
-                String nome = linha.Substring(3, 16).Trim();
-                int coordenadaX = int.Parse(linha.Substring(19, 5).Trim());
-                int coordenadaY = int.Parse(linha.Substring(24, 4).Trim());
-                Cidade novaCidade = new Cidade(idCidade, nome, coordenadaX, coordenadaY);
-                listaCidade.Add(novaCidade);
-                Console.WriteLine(novaCidade);
-                arvore.Incluir(novaCidade);
-            }
-        }
+            listaCidades = new List<Cidade>();
+            listaCaminhos = new List<Caminho>();
+            arvore = Leitor.lerCidades();
+            listaCidades = arvore.getListaOrdenada();
+            listaCaminhos = Leitor.lerCaminhos();
+        }      
+
+        
         private void pbMapa_Paint(object sender, PaintEventArgs e)
         {
             double xProporcional = 4096.00 / pbMapa.Width;
             double yProporcional = 2048.00 / pbMapa.Height;
-            foreach (Cidade c in listaCidade) {
+            foreach (Cidade c in listaCidades) {
                 e.Graphics.FillEllipse(Brushes.Black, c.CoordenadaX / Convert.ToSingle(xProporcional), c.CoordenadaY / Convert.ToSingle(yProporcional), 7f, 7f);
                 e.Graphics.DrawString(c.Nome, new Font("Comic Sans", 8, FontStyle.Bold), Brushes.Black, c.CoordenadaX / Convert.ToSingle(xProporcional)-15, c.CoordenadaY / Convert.ToSingle(yProporcional) -15);
             }
