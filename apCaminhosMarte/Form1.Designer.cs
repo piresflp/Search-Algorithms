@@ -54,7 +54,6 @@
             this.lsbOrigem = new System.Windows.Forms.ListBox();
             this.pbMapa = new System.Windows.Forms.PictureBox();
             this.tpArvore = new System.Windows.Forms.TabPage();
-            this.lblMatriz = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tpRotas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -77,7 +76,6 @@
             // 
             // tpRotas
             // 
-            this.tpRotas.Controls.Add(this.lblMatriz);
             this.tpRotas.Controls.Add(this.btnBuscar);
             this.tpRotas.Controls.Add(this.dataGridView2);
             this.tpRotas.Controls.Add(this.dataGridView1);
@@ -332,16 +330,6 @@
             this.tpArvore.UseVisualStyleBackColor = true;
             this.tpArvore.Paint += new System.Windows.Forms.PaintEventHandler(this.tpArvore_Paint);
             // 
-            // lblMatriz
-            // 
-            this.lblMatriz.AutoSize = true;
-            this.lblMatriz.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMatriz.Location = new System.Drawing.Point(381, 113);
-            this.lblMatriz.Name = "lblMatriz";
-            this.lblMatriz.Size = new System.Drawing.Size(45, 16);
-            this.lblMatriz.TabIndex = 12;
-            this.lblMatriz.Text = "label5";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -388,7 +376,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
-        private System.Windows.Forms.Label lblMatriz;
     }
 }
 

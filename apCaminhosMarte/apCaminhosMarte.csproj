@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="C5, Version=2.5.0.0, Culture=neutral, PublicKeyToken=282361b99ded7e8e, processorArchitecture=MSIL">
+      <HintPath>..\packages\C5.2.5.3\lib\net45\C5.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualC.STLCLR" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,8 +60,14 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="GPS.cs" />
+    <Compile Include="IStack.cs" />
     <Compile Include="Leitor.cs" />
+    <Compile Include="ListaSImples.cs" />
+    <Compile Include="Movimento.cs" />
     <Compile Include="NoArvore.cs" />
+    <Compile Include="NoLista.cs" />
+    <Compile Include="PilhaLista.cs" />
+    <Compile Include="PilhaVaziaException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -72,6 +82,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

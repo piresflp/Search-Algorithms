@@ -20,61 +20,42 @@ namespace apCaminhosMarte
         }
 
         private void BtnBuscar_Click(object sender, EventArgs e)
-        {
+    {
             if (lsbOrigem.SelectedIndex == -1)
                 MessageBox.Show("Selecione a cidade de origem!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            if(lsbDestino.SelectedIndex == -1)
+            if (lsbDestino.SelectedIndex == -1)
                 MessageBox.Show("Selecione a cidade de destino!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            String[] cidades = new String[7]{"Acheron", "Arena", "Arrakeen", "Bakhuysen", "Bradburry", "Burroughs", "Cairo"};
-            String cidadeOrigem = cidades[lsbOrigem.SelectedIndex];
-            String cidadeDestino = cidades[lsbDestino.SelectedIndex];
-            int idOrigem = -1, idDestino = -1;
-
-            foreach(Cidade c in gps.ListaCidades) {
-                if (c.Nome.Equals(cidadeOrigem))
-                    idOrigem = c.Id;
-
-                else if (c.Nome.Equals(cidadeDestino))
-                    idDestino = c.Id;
-
-                if (idOrigem != -1 && idDestino != -1)
-                    break;
-            }           
-            gps.buscarCaminhos(idOrigem, idDestino);
-        }
-
-        private void imprimeMatriz(int[,] m, Label lblMetodo, int colunas, int linhas)
-        {
-            lblMetodo.Text = "";
-            for (int i = 0; i <= m.GetUpperBound(0); i++)//percoro as linhas todas
+            else
             {
-                for (int j = 0; j <= m.GetUpperBound(1); j++) // percoro as clunas todas
+                String[] cidades = new String[7] { "Acheron", "Arena", "Arrakeen", "Bakhuysen", "Bradbury", "Burroughs", "Cairo" };
+                String cidadeOrigem = cidades[lsbOrigem.SelectedIndex];
+                String cidadeDestino = cidades[lsbDestino.SelectedIndex];
+                int idOrigem = -1, idDestino = -1;
+
+                foreach (Cidade c in gps.ListaCidades)
                 {
-                    lblMetodo.Text += (j == 0 ? "" : " ") + m[i, j]; //adiciona um espaço antes de todas as colunas excepto a primeira, mas ao usares o espaço como separador, vai ficar esquisito caso uns números tenham mais dígitos do que outros
+                    if (c.Nome.Equals(cidadeOrigem))
+                        idOrigem = c.Id;
+
+                    else if (c.Nome== cidadeDestino)
+                        idDestino = c.Id;
+
+                    if (idOrigem != -1 && idDestino != -1)
+                        break;
                 }
-                lblMetodo.Text += "\n"; //muda de linha no fim de cada linha
+                foreach(PilhaLista<Movimento> caminho in gps.buscarCaminhos(idOrigem, idDestino))
+                {
+                    caminho.Exibir(dataGridView1);
+                }
             }
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             gps = new GPS();
-            imprimeMatriz(gps.montarMatrizAdjacencia(), lblMatriz, gps.ListaCidades.Count - 1, gps.ListaCidades.Count - 1);
         }
-
-      /* public String[,] testarMatriz()
-        {
-            int qtdCidades = listaCidades.Count - 1;
-            String[,] matriz = new String[qtdCidades, qtdCidades];
-
-            for (int i = 0; i < qtdCidades; i++)
-                for (int j = 0; j < qtdCidades; j++)
-                    foreach (Caminho c in listaCaminhos)
-                        if (c.IdCidadeOrigem == i && c.IdCidadeDestino == j)
-                            matriz[i, j] = "1";
-
-            return matriz;
-        }*/         
+       
         
         private void pbMapa_Paint(object sender, PaintEventArgs e)
         {

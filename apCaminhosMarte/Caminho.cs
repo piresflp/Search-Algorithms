@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace apCaminhosMarte
 {
-    class Caminho
+    class Caminho : IComparable<Caminho>
     {
         private int idCidadeOrigem, idCidadeDestino;
         private int distancia, tempo, custo;
@@ -25,5 +25,10 @@ namespace apCaminhosMarte
         public int Distancia { get => distancia; set => distancia = value; }
         public int Tempo { get => tempo; set => tempo = value; }
         public int Custo { get => custo; set => custo = value; }
+
+        public int CompareTo (Caminho outro)
+        {
+            return this.distancia.CompareTo(outro.distancia);
+        }
     }
 }
