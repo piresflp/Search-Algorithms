@@ -31,16 +31,16 @@ namespace apCaminhosMarte
             ListaCaminhos = Leitor.lerCaminhos();
         }
 
-        private Caminho[,] montarMatrizAdjacencia()
+        public int[,] montarMatrizAdjacencia()
         {
             int qtdCidades = ListaCidades.Count - 1;
-            Caminho[,] matriz = new Caminho[qtdCidades, qtdCidades];
+            int[,] matriz = new int[qtdCidades, qtdCidades];
 
             for (int i = 0; i < qtdCidades; i++)
                 for (int j = 0; j < qtdCidades; j++)
                     foreach (Caminho c in ListaCaminhos)
                         if (c.IdCidadeOrigem == i && c.IdCidadeDestino == j)
-                            matriz[i, j] = c;
+                            matriz[i, j] = c.Distancia;
 
             return matriz;
         }

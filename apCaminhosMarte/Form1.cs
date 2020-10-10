@@ -42,12 +42,24 @@ namespace apCaminhosMarte
                     break;
             }           
             gps.buscarCaminhos(idOrigem, idDestino);
-        }       
-        
+        }
 
+        private void imprimeMatriz(int[,] m, Label lblMetodo, int colunas, int linhas)
+        {
+            lblMetodo.Text = "";
+            for (int i = 0; i <= m.GetUpperBound(0); i++)//percoro as linhas todas
+            {
+                for (int j = 0; j <= m.GetUpperBound(1); j++) // percoro as clunas todas
+                {
+                    lblMetodo.Text += (j == 0 ? "" : " ") + m[i, j]; //adiciona um espaço antes de todas as colunas excepto a primeira, mas ao usares o espaço como separador, vai ficar esquisito caso uns números tenham mais dígitos do que outros
+                }
+                lblMetodo.Text += "\n"; //muda de linha no fim de cada linha
+            }
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             gps = new GPS();
+            imprimeMatriz(gps.montarMatrizAdjacencia(), lblMatriz, gps.ListaCidades.Count - 1, gps.ListaCidades.Count - 1);
         }
 
       /* public String[,] testarMatriz()
@@ -62,12 +74,7 @@ namespace apCaminhosMarte
                             matriz[i, j] = "1";
 
             return matriz;
-        }*/
-
-        private void LerArquivos()
-        {            
-           
-        }    
+        }*/         
         
         private void pbMapa_Paint(object sender, PaintEventArgs e)
         {
