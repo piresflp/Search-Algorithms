@@ -13,9 +13,7 @@ namespace apCaminhosMarte
 {
     public partial class Form1 : Form
     {
-        Arvore<Cidade> arvore;
-        List<Cidade> listaCidades;
-        List<Caminho> listaCaminhos;
+        GPS gps;
         public Form1()
         {
             InitializeComponent();
@@ -33,7 +31,7 @@ namespace apCaminhosMarte
             String cidadeDestino = cidades[lsbDestino.SelectedIndex];
             int idOrigem = -1, idDestino = -1;
 
-            foreach(Cidade c in listaCidades) {
+            foreach(Cidade c in gps.ListaCidades) {
                 if (c.Nome.Equals(cidadeOrigem))
                     idOrigem = c.Id;
 
@@ -42,49 +40,40 @@ namespace apCaminhosMarte
 
                 if (idOrigem != -1 && idDestino != -1)
                     break;
-            }            
-            buscarCaminhos(idOrigem, idDestino);
-        }
-
-        private Caminho[,] montarMatrizAdjacencia()
-        {            
-            int qtdCidades = listaCidades.Count - 1;
-            Caminho[,] matriz = new Caminho[qtdCidades, qtdCidades];
-
-            for(int i = 0; i < qtdCidades; i++) 
-                for(int j = 0; j < qtdCidades; j++)                
-                    foreach(Caminho c in listaCaminhos)                    
-                        if (c.IdCidadeOrigem == i && c.IdCidadeDestino == j)
-                            matriz[i, j] = c;                    
+            }           
+            gps.buscarCaminhos(idOrigem, idDestino);
+        }       
         
-            return matriz;
-        }
-
-        private void buscarCaminhos(int idOrigem, int idDestino)
-        {
-          
-        }
 
         private void Form1_Load(object sender, EventArgs e)
-        {   
-            LerArquivos();
+        {
+            gps = new GPS();
         }
 
-        private void LerArquivos()
+      /* public String[,] testarMatriz()
         {
-            arvore = new Arvore<Cidade>();
-            listaCidades = new List<Cidade>();
-            listaCaminhos = new List<Caminho>();
-            arvore = Leitor.lerCidades();
-            listaCidades = arvore.getListaOrdenada();
-            listaCaminhos = Leitor.lerCaminhos();
+            int qtdCidades = listaCidades.Count - 1;
+            String[,] matriz = new String[qtdCidades, qtdCidades];
+
+            for (int i = 0; i < qtdCidades; i++)
+                for (int j = 0; j < qtdCidades; j++)
+                    foreach (Caminho c in listaCaminhos)
+                        if (c.IdCidadeOrigem == i && c.IdCidadeDestino == j)
+                            matriz[i, j] = "1";
+
+            return matriz;
+        }*/
+
+        private void LerArquivos()
+        {            
+           
         }    
         
         private void pbMapa_Paint(object sender, PaintEventArgs e)
         {
             double xProporcional = 4096.00 / pbMapa.Width;
             double yProporcional = 2048.00 / pbMapa.Height;
-            foreach (Cidade c in listaCidades) {
+            foreach (Cidade c in gps.ListaCidades) {
                 e.Graphics.FillEllipse(Brushes.Black, c.CoordenadaX / Convert.ToSingle(xProporcional), c.CoordenadaY / Convert.ToSingle(yProporcional), 7f, 7f);
                 e.Graphics.DrawString(c.Nome, new Font("Comic Sans", 8, FontStyle.Bold), Brushes.Black, c.CoordenadaX / Convert.ToSingle(xProporcional)-15, c.CoordenadaY / Convert.ToSingle(yProporcional) -15);
             }
@@ -92,7 +81,7 @@ namespace apCaminhosMarte
 
         private void tpArvore_Paint(object sender, PaintEventArgs e)
         {
-            arvore.DesenharArvore(true, arvore.Raiz, (int)tpArvore.Width / 2, 0, Math.PI / 2, Math.PI / 2.5, 300, e.Graphics);
+            gps.Arvore.DesenharArvore(true, gps.Arvore.Raiz, (int)tpArvore.Width / 2, 0, Math.PI / 2, Math.PI / 2.5, 300, e.Graphics);
         }
     }
 }
