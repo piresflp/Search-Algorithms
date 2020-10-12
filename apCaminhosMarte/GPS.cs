@@ -45,22 +45,22 @@ namespace apCaminhosMarte
             return matriz;
         }
 
-        public List<PilhaLista<Movimento>> buscarCaminhos(int idOrigem, int idDestino)
+        public List<PilhaLista<Caminho>> buscarCaminhos(int idOrigem, int idDestino, ref PilhaLista<Caminho> melhorCaminho)
         {
-            int cidadeAtual, saidaAtual;
+            int cidadeAtual, saidaAtual, menorDistancia = 0;
             bool achouCaminho = false,
             naoTemSaida = false;
             int qtsCidades = ListaCidades.Count;
             bool[] passou = new bool[qtsCidades];
             int[,] grafo = montarMatrizAdjacencia();
-            List<PilhaLista<Movimento>> caminhos = new List<PilhaLista<Movimento>>();
+            List<PilhaLista<Caminho>> caminhos = new List<PilhaLista<Caminho>>();
 
             for (int indice = 0; indice < qtsCidades; indice++)
                 passou[indice] = false;
 
             cidadeAtual = idOrigem;
             saidaAtual = 0;
-            var pilha = new PilhaLista<Movimento>();
+            var pilha = new PilhaLista<Caminho>();
             while (!naoTemSaida)
             {
                 naoTemSaida = (cidadeAtual == idOrigem && saidaAtual == 23 && pilha.EstaVazia);
@@ -79,13 +79,13 @@ namespace apCaminhosMarte
 
                         if (saidaAtual == idDestino)
                         {
-                            Movimento movimento = new Movimento(cidadeAtual, saidaAtual);
+                            Caminho movimento = new Caminho(cidadeAtual, saidaAtual);
                             pilha.Empilhar(movimento);
                             achouCaminho = true;
                         }
                         else
                         {
-                            Movimento movimento = new Movimento(cidadeAtual, saidaAtual);
+                            Caminho movimento = new Caminho(cidadeAtual, saidaAtual);
                             pilha.Empilhar(movimento);
                             passou[cidadeAtual] = true;
                             cidadeAtual = saidaAtual;
@@ -98,18 +98,18 @@ namespace apCaminhosMarte
                     {
                         passou[cidadeAtual] = false;
                         var movimento = pilha.Desempilhar();
-                        saidaAtual = movimento.IdDestino;
-                        cidadeAtual = movimento.IdOrigem;
+                        saidaAtual = movimento.IdCidadeDestino;
+                        cidadeAtual = movimento.IdCidadeOrigem;
                         saidaAtual++;
                     }
-                var saida = new PilhaLista<Movimento>();
+                var saida = new PilhaLista<Caminho>();
                 if (achouCaminho)
-                {
-                    PilhaLista<Movimento> clone = new PilhaLista<Movimento>();
+                {                    
+                    PilhaLista<Caminho> clone = new PilhaLista<Caminho>();
                     clone = pilha.Clone();
                     while (!clone.EstaVazia)
                     { 
-                        Movimento movimento = clone.Desempilhar();
+                        Caminho movimento = clone.Desempilhar();
                         saida.Empilhar(movimento);
                     }
                     caminhos.Add(saida);
@@ -120,6 +120,8 @@ namespace apCaminhosMarte
                         passou[i] = false;
 
                     saidaAtual++;
+
+                    int distanciaTotal = 0;                    
                 }
             }            
             return caminhos;
