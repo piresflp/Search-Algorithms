@@ -31,3 +31,6 @@ C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\obj\Debug\apCaminho
 C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\bin\Debug\C5.dll
 C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\bin\Debug\C5.xml
 C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\obj\Debug\apCaminhosMarte.csproj.CopyComplete
+C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\bin\Debug\C5.dll
+C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\bin\Debug\C5.xml
+C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\obj\Debug\apCaminhosMarte.csproj.CopyComplete

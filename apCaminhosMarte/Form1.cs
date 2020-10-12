@@ -44,13 +44,57 @@ namespace apCaminhosMarte
                     if (idOrigem != -1 && idDestino != -1)
                         break;
                 }
-                foreach(PilhaLista<Movimento> caminho in gps.buscarCaminhos(idOrigem, idDestino))
-                {
-                    caminho.Exibir(dataGridView1);
-                }
+                List<PilhaLista<Movimento>> caminhosPossiveis = gps.buscarCaminhos(idOrigem, idDestino);
+                ExibirCaminhos(caminhosPossiveis);
             }
 
         }
+
+        private void ExibirCaminhos(List<PilhaLista<Movimento>> caminhos)
+        {
+            dataGridView1.ColumnCount = 0;
+            dataGridView1.RowCount = caminhos.Count;
+            int caminhosExibidos = 0;
+
+            int t = 0;
+            foreach (PilhaLista<Movimento> caminho in caminhos)
+            {
+                t = caminho.Tamanho;
+                if(t > dataGridView1.ColumnCount)
+                    dataGridView1.ColumnCount = t;
+
+                int i = 0;
+                while(!caminho.EstaVazia)//for(int i = t - 1; i >= 0; i--)
+                {
+                    Movimento mov = caminho.Desempilhar();
+                    dataGridView1.Rows[caminhosExibidos].Cells[i].Value = mov;
+                    i++;
+                }
+                caminhosExibidos++;
+            }
+        }
+
+        private PilhaLista<Movimento> melhorCaminho(List<PilhaLista<Movimento>> caminhos)
+        {
+            PilhaLista<Movimento> ret = null;
+            int maiorDistancia = 0;
+
+            foreach(PilhaLista<Movimento> caminho in caminhos)
+            {
+                int distanciaTotal = 0;
+                while (!caminho.EstaVazia)
+                {
+                    //distanciaTotal += caminho.Desempilhar()
+                    if(distanciaTotal > maiorDistancia)
+                    {
+                        ret = caminho;
+                        maiorDistancia = distanciaTotal;
+                    }
+                }
+            }
+            return ret;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             gps = new GPS();
