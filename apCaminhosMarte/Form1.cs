@@ -44,15 +44,18 @@ namespace apCaminhosMarte
                     if (idOrigem != -1 && idDestino != -1)
                         break;
                 }
+                gps.buscarCaminhos(idOrigem, idDestino);
                 PilhaLista<Caminho> melhorCaminho = new PilhaLista<Caminho>();
-                List<PilhaLista<Caminho>> caminhosPossiveis = gps.buscarCaminhos(idOrigem, idDestino, ref melhorCaminho);
+                List<PilhaLista<Caminho>> caminhosPossiveis = new List<PilhaLista<Caminho>>(gps.CaminhosEncontrados);
                 List<PilhaLista<Caminho>> caminhosPossiveisClone = new List<PilhaLista<Caminho>>(caminhosPossiveis.Count);
 
                 caminhosPossiveis.ForEach((item) =>
                 {
                     caminhosPossiveisClone.Add((PilhaLista<Caminho>)item.Clone());
                 });
+                melhorCaminho = buscarMelhorCaminho(caminhosPossiveis);
                 ExibirCaminhos(caminhosPossiveisClone, melhorCaminho);
+                gps.CaminhosEncontrados = new List<PilhaLista<Caminho>>();
             }
 
         }
@@ -71,7 +74,7 @@ namespace apCaminhosMarte
                     dataGridView1.ColumnCount = t;
 
                
-                for(int i =0; !caminho.EstaVazia; i++)
+                for(int i = t-1; !caminho.EstaVazia; i--)
                 {
                     Caminho mov = (Caminho )caminho.Desempilhar();
                     dataGridView1.Rows[caminhosExibidos].Cells[i].Value = mov.ToString();
@@ -82,35 +85,38 @@ namespace apCaminhosMarte
             t = melhorCaminho.Tamanho;
             dataGridView2.ColumnCount = t;
             dataGridView2.RowCount = 1;
-            for(int i = 0; !melhorCaminho.EstaVazia; i++)
+            for(int i = t-1 ; !melhorCaminho.EstaVazia; i--)
             {
                 Caminho mov = melhorCaminho.Desempilhar();
                 dataGridView2.Rows[0].Cells[i].Value = mov.ToString();
             }
         }
 
-   /*   private PilhaLista<Caminho> buscarMelhorCaminho(List<PilhaLista<Caminho>> caminhos)
+      private PilhaLista<Caminho> buscarMelhorCaminho(List<PilhaLista<Caminho>> caminhos)
         {
             PilhaLista<Caminho> ret = new PilhaLista<Caminho>();
-            int maiorDistancia = 0;
+            int menorDistancia = 0;
+            int[,] matriz = gps.Grafo;
 
             foreach(PilhaLista<Caminho> caminho in caminhos)
             {
+                PilhaLista<Caminho> clone = caminho.Clone();
                 int distanciaTotal = 0;
-                while (!caminho.EstaVazia)
+                while (!clone.EstaVazia)
                 {
-                    int idOrigem = caminho.Desempilhar().IdCidadeOrigem;
-                    int idDestino = caminho.Desempilhar().IdCidadeDestino;
-                    distanciaTotal =
-                    if(distanciaTotal >= maiorDistancia)
-                    {
-                        ret = caminho;
-                        maiorDistancia = distanciaTotal;
-                    }
+                    int idOrigem = clone.OTopo().IdCidadeOrigem;
+                    int idDestino = clone.OTopo().IdCidadeDestino;
+                    distanciaTotal += matriz[idOrigem, idDestino];
+                    clone.Desempilhar();
+                }
+                if (distanciaTotal < menorDistancia || menorDistancia == 0)
+                {
+                    ret = caminho.Clone();
+                    menorDistancia = distanciaTotal;
                 }
             }
             return ret;
-        }*/
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {

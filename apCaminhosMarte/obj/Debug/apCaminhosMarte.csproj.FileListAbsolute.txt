@@ -37,3 +37,6 @@ C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\obj\Debug\apCamin
 C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\bin\Debug\AWSSDK.Core.dll
 C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\bin\Debug\AWSSDK.Core.pdb
 C:\Users\Felipe\Desktop\19169_19196_Projeto2ED\apCaminhosMarte\bin\Debug\AWSSDK.Core.xml
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\bin\Debug\AWSSDK.Core.dll
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\bin\Debug\AWSSDK.Core.pdb
+C:\Users\Rafael\Desktop\Caminhos-entre-Marte\apCaminhosMarte\bin\Debug\AWSSDK.Core.xml
