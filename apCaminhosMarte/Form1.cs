@@ -63,18 +63,18 @@ namespace apCaminhosMarte
             dataGridView1.RowCount = caminhos.Count;
             int caminhosExibidos = 0;
 
-            int t = 0;
+            int t;
             foreach (PilhaLista<Caminho> caminho in caminhos)
             {
                 t = caminho.Tamanho;
                 if(t > dataGridView1.ColumnCount)
                     dataGridView1.ColumnCount = t;
 
-                
-                for(int i = t - 1; i >= 0; i--)
+               
+                for(int i =0; !caminho.EstaVazia; i++)
                 {
                     Caminho mov = (Caminho )caminho.Desempilhar();
-                    dataGridView1.Rows[caminhosExibidos].Cells[i].Value = mov;
+                    dataGridView1.Rows[caminhosExibidos].Cells[i].Value = mov.ToString();
                 }
                 caminhosExibidos++;
             }
@@ -82,14 +82,14 @@ namespace apCaminhosMarte
             t = melhorCaminho.Tamanho;
             dataGridView2.ColumnCount = t;
             dataGridView2.RowCount = 1;
-            for(int i = t - 1; i >=0; i--)
+            for(int i = 0; !melhorCaminho.EstaVazia; i++)
             {
-                Caminho mov = (Caminho)melhorCaminho.Desempilhar();
-                dataGridView2.Rows[0].Cells[i].Value = mov;
+                Caminho mov = melhorCaminho.Desempilhar();
+                dataGridView2.Rows[0].Cells[i].Value = mov.ToString();
             }
         }
 
-       private PilhaLista<Caminho> buscarMelhorCaminho(List<PilhaLista<Caminho>> caminhos)
+   /*   private PilhaLista<Caminho> buscarMelhorCaminho(List<PilhaLista<Caminho>> caminhos)
         {
             PilhaLista<Caminho> ret = new PilhaLista<Caminho>();
             int maiorDistancia = 0;
@@ -110,7 +110,7 @@ namespace apCaminhosMarte
                 }
             }
             return ret;
-        }
+        }*/
 
         private void Form1_Load(object sender, EventArgs e)
         {

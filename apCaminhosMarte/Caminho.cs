@@ -11,6 +11,11 @@ namespace apCaminhosMarte
         private int idCidadeOrigem, idCidadeDestino;
         private int distancia, tempo, custo;
 
+        public Caminho(int idCidadeOrigem, int idCidadeDestino)
+        {
+            this.idCidadeOrigem = idCidadeOrigem;
+            this.idCidadeDestino = idCidadeDestino;
+        }
         public Caminho(int idCidadeOrigem, int idCidadeDestino, int distancia, int tempo, int custo)
         {
             this.idCidadeOrigem = idCidadeOrigem;
@@ -29,6 +34,12 @@ namespace apCaminhosMarte
         public int CompareTo (Caminho outro)
         {
             return this.distancia.CompareTo(outro.distancia);
+        }
+
+
+        public override string ToString()
+        {
+            return "Id Origem: " + this.IdCidadeOrigem + "/ Id Destino: " + this.idCidadeDestino;
         }
     }
 }

@@ -67,7 +67,6 @@
     <Compile Include="IStack.cs" />
     <Compile Include="Leitor.cs" />
     <Compile Include="ListaSImples.cs" />
-    <Compile Include="Movimento.cs" />
     <Compile Include="NoArvore.cs" />
     <Compile Include="NoLista.cs" />
     <Compile Include="PilhaLista.cs" />
