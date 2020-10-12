@@ -76,6 +76,7 @@ namespace apCaminhosMarte
 
         private PilhaLista<Movimento> melhorCaminho(List<PilhaLista<Movimento>> caminhos)
         {
+            int[,] matrizDistancias = gps.montarMatrizAdjacencia();
             PilhaLista<Movimento> ret = null;
             int maiorDistancia = 0;
 
@@ -84,7 +85,9 @@ namespace apCaminhosMarte
                 int distanciaTotal = 0;
                 while (!caminho.EstaVazia)
                 {
-                    //distanciaTotal += caminho.Desempilhar()
+                    int idOrigem = caminho.Desempilhar().IdOrigem;
+                    int idDestino = caminho.Desempilhar().IdDestino;
+                    distanciaTotal += matrizDistancias[idOrigem, idDestino]; 
                     if(distanciaTotal > maiorDistancia)
                     {
                         ret = caminho;
