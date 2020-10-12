@@ -20,7 +20,7 @@ namespace apCaminhosMarte
         }
 
         private void BtnBuscar_Click(object sender, EventArgs e)
-    {
+        {
             if (lsbOrigem.SelectedIndex == -1)
                 MessageBox.Show("Selecione a cidade de origem!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             if (lsbDestino.SelectedIndex == -1)
@@ -45,12 +45,19 @@ namespace apCaminhosMarte
                         break;
                 }
                 List<PilhaLista<Movimento>> caminhosPossiveis = gps.buscarCaminhos(idOrigem, idDestino);
-                ExibirCaminhos(caminhosPossiveis);
+                List<PilhaLista<Movimento>> caminhosPossiveisClone = new List<PilhaLista<Movimento>>(caminhosPossiveis.Count);
+
+                caminhosPossiveis.ForEach((item) =>
+                {
+                    caminhosPossiveisClone.Add((PilhaLista<Movimento>)item.Clone());
+                });
+                PilhaLista<Movimento> melhorCaminho = buscarMelhorCaminho(caminhosPossiveis);
+                ExibirCaminhos(caminhosPossiveisClone, melhorCaminho);
             }
 
         }
 
-        private void ExibirCaminhos(List<PilhaLista<Movimento>> caminhos)
+        private void ExibirCaminhos(List<PilhaLista<Movimento>> caminhos, PilhaLista<Movimento> melhorCaminho)
         {
             dataGridView1.ColumnCount = 0;
             dataGridView1.RowCount = caminhos.Count;
@@ -63,21 +70,29 @@ namespace apCaminhosMarte
                 if(t > dataGridView1.ColumnCount)
                     dataGridView1.ColumnCount = t;
 
-                int i = 0;
-                while(!caminho.EstaVazia)//for(int i = t - 1; i >= 0; i--)
+                
+                for(int i = t - 1; i >= 0; i--)
                 {
-                    Movimento mov = caminho.Desempilhar();
+                    Movimento mov = (Movimento )caminho.Desempilhar();
                     dataGridView1.Rows[caminhosExibidos].Cells[i].Value = mov;
-                    i++;
                 }
                 caminhosExibidos++;
             }
+
+            t = melhorCaminho.Tamanho;
+            dataGridView2.ColumnCount = t;
+            dataGridView2.RowCount = 1;
+            for(int i = t - 1; i >=0; i--)
+            {
+                Movimento mov = (Movimento)melhorCaminho.Desempilhar();
+                dataGridView2.Rows[0].Cells[i].Value = mov;
+            }
         }
 
-        private PilhaLista<Movimento> melhorCaminho(List<PilhaLista<Movimento>> caminhos)
+       private PilhaLista<Movimento> buscarMelhorCaminho(List<PilhaLista<Movimento>> caminhos)
         {
             int[,] matrizDistancias = gps.montarMatrizAdjacencia();
-            PilhaLista<Movimento> ret = null;
+            PilhaLista<Movimento> ret = new PilhaLista<Movimento>();
             int maiorDistancia = 0;
 
             foreach(PilhaLista<Movimento> caminho in caminhos)
@@ -85,10 +100,10 @@ namespace apCaminhosMarte
                 int distanciaTotal = 0;
                 while (!caminho.EstaVazia)
                 {
-                    int idOrigem = caminho.Desempilhar().IdOrigem;
-                    int idDestino = caminho.Desempilhar().IdDestino;
+                    int idOrigem = caminho.Desempilhar().Info.IdOrigem;
+                    int idDestino = caminho.Desempilhar().Info.IdDestino;
                     distanciaTotal += matrizDistancias[idOrigem, idDestino]; 
-                    if(distanciaTotal > maiorDistancia)
+                    if(distanciaTotal >= maiorDistancia)
                     {
                         ret = caminho;
                         maiorDistancia = distanciaTotal;
@@ -117,6 +132,7 @@ namespace apCaminhosMarte
         private void tpArvore_Paint(object sender, PaintEventArgs e)
         {
             gps.Arvore.DesenharArvore(true, gps.Arvore.Raiz, (int)tpArvore.Width / 2, 0, Math.PI / 2, Math.PI / 2.5, 300, e.Graphics);
-        }
+        }       
+        
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace apCaminhosMarte
 {
-    class Movimento : IComparable<Movimento>
+    class Movimento : IComparable<Movimento>, ICloneable
     {
         int idOrigem, idDestino;
 
@@ -28,6 +28,24 @@ namespace apCaminhosMarte
         public override String ToString()
         {
             return "id origem: "+ idOrigem + "  id destino: "+ idDestino;
+        }
+
+        public Movimento(Movimento modelo)
+        {
+            this.IdOrigem = modelo.IdOrigem;
+            this.IdDestino = modelo.IdDestino;
+        }
+
+        public Object Clone()
+        {
+            Movimento ret = null;
+            try
+            {
+                ret = new Movimento(this);
+            }
+            catch (Exception e) { }
+
+            return ret;
         }
     }
 }

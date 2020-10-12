@@ -96,6 +96,7 @@ namespace apCaminhosMarte
                 if (!achouCaminho)
                     if (!pilha.EstaVazia)
                     {
+                        passou[cidadeAtual] = false;
                         var movimento = pilha.Desempilhar();
                         saidaAtual = movimento.IdDestino;
                         cidadeAtual = movimento.IdOrigem;
@@ -114,9 +115,13 @@ namespace apCaminhosMarte
                     caminhos.Add(saida);
                     achouCaminho = false;
                     pilha.Desempilhar();
+
+                    for (int i = 0; i < qtsCidades; i++)
+                        passou[i] = false;
+
                     saidaAtual++;
                 }
-            }
+            }            
             return caminhos;
         }
     }
