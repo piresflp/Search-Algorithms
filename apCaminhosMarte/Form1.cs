@@ -21,6 +21,7 @@ namespace apCaminhosMarte
 
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
+            gps.CaminhosEncontrados = new List<PilhaLista<Caminho>>();
             if (lsbOrigem.SelectedIndex == -1)
                 MessageBox.Show("Selecione a cidade de origem!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             if (lsbDestino.SelectedIndex == -1)
@@ -55,7 +56,6 @@ namespace apCaminhosMarte
                 });
                 melhorCaminho = buscarMelhorCaminho(caminhosPossiveis);
                 ExibirCaminhos(caminhosPossiveisClone, melhorCaminho);
-                gps.CaminhosEncontrados = new List<PilhaLista<Caminho>>();
             }
 
         }
@@ -137,7 +137,50 @@ namespace apCaminhosMarte
         private void tpArvore_Paint(object sender, PaintEventArgs e)
         {
             gps.Arvore.DesenharArvore(true, gps.Arvore.Raiz, (int)tpArvore.Width / 2, 0, Math.PI / 2, Math.PI / 2.5, 300, e.Graphics);
-        }       
-        
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            Graphics g = pbMapa.CreateGraphics();
+            g.Clear(Color.White);
+            pbMapa.Image = Image.FromFile("mars_political_map_by_axiaterraartunion_d4vfxdf-pre.jpg");
+            Application.DoEvents();
+            desenharCaminho(this.gps.CaminhosEncontrados[dataGridView1.CurrentCell.RowIndex]);
+        }
+
+        private void desenharCaminho(PilhaLista<Caminho> caminho)
+        {
+            if (caminho != null)
+            {
+                Graphics g = pbMapa.CreateGraphics();
+                Pen pen = new Pen(Color.Blue, 3);
+
+                int xProporcional = 4096 / pbMapa.Width;
+                int yProporcional = 2048 / pbMapa.Height;
+                PilhaLista<Caminho> clone = caminho.Clone();
+                int cordXOrigem = 0;
+                int cordYOrigem = 0;
+                int cordXDestino = 0;
+                int cordYDestino = 0;
+                while(!clone.EstaVazia)
+                {
+                    foreach(Cidade c in gps.ListaCidades)
+                    {
+                        if (clone.Primeiro.Info.IdCidadeOrigem == c.Id)
+                        {
+                            cordXOrigem = c.CoordenadaX;
+                            cordYOrigem = c.CoordenadaY;
+                        }
+                        if(clone.Primeiro.Info.IdCidadeDestino == c.Id)
+                        {
+                            cordXDestino = c.CoordenadaX;
+                            cordYDestino = c.CoordenadaY;
+                        }
+                    }
+                    g.DrawLine(pen, new Point(cordXOrigem / xProporcional, cordYOrigem / yProporcional), new Point(cordXDestino / xProporcional, cordYDestino / yProporcional));
+                    clone.Desempilhar();
+                }
+            }
+        }
     }
 }

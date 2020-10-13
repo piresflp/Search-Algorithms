@@ -9,7 +9,7 @@ namespace apCaminhosMarte
 {
     class Arvore<Dado> where Dado : IComparable<Dado>, ICloneable
     {
-        private NoArvore<Dado> raiz, atual, antecessor;
+        protected NoArvore<Dado> raiz, atual, antecessor;
 
         public NoArvore<Dado> Raiz { get => raiz; set => raiz = value; }
         public NoArvore<Dado> Atual { get => atual; set => atual = value; }
