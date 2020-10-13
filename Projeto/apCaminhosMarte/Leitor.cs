@@ -13,6 +13,10 @@ namespace apCaminhosMarte
 {
     static class Leitor
     {
+
+        /**
+         * Método responsável por ler o arquivo "CidadesMarte.txt" e armazenar seus dados numa Arvore de cidades, que será retornada.
+         */
         public static Arvore<Cidade> lerCidades()
         {
             StreamReader leitor = new StreamReader("CidadesMarte.txt");
@@ -29,6 +33,10 @@ namespace apCaminhosMarte
             }
             return arvore;
         }
+
+        /**
+         * Método que le o arquivo "CaminhosEntreCidadesMarte.txt" e retorna os seus dados numa lista genérica de caminhos.
+         */ 
         public static List<Caminho> lerCaminhos()
         {
             StreamReader leitor = new StreamReader("CaminhosEntreCidadesMarte.txt");

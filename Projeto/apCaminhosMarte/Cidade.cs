@@ -34,7 +34,6 @@ namespace apCaminhosMarte
 
         public override string ToString()
         {
-            //return "Id " + this.id + "; Nome: " + this.nome + "; CoordenadaX: " + this.coordenadaX + "; CoordenadaY: "+this.coordenadaY;
             return "" + this.id + " " + this.nome;
         }
 
