@@ -89,5 +89,31 @@ namespace apCaminhosMarte
                 passou[idOrigem] = false;
             }
         }
+
+        public PilhaLista<Caminho> buscarMelhorCaminho(List<PilhaLista<Caminho>> caminhos)
+        {
+            PilhaLista<Caminho> ret = new PilhaLista<Caminho>();
+            int menorDistancia = 0;
+            int[,] matriz = this.Grafo;
+
+            foreach (PilhaLista<Caminho> caminho in caminhos)
+            {
+                PilhaLista<Caminho> clone = caminho.Clone();
+                int distanciaTotal = 0;
+                while (!clone.EstaVazia)
+                {
+                    int idOrigem = clone.OTopo().IdCidadeOrigem;
+                    int idDestino = clone.OTopo().IdCidadeDestino;
+                    distanciaTotal += matriz[idOrigem, idDestino];
+                    clone.Desempilhar();
+                }
+                if (distanciaTotal < menorDistancia || menorDistancia == 0)
+                {
+                    ret = caminho.Clone();
+                    menorDistancia = distanciaTotal;
+                }
+            }
+            return ret;
+        }
     }
 }
