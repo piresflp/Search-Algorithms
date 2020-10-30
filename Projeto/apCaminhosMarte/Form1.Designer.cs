@@ -31,6 +31,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tpRotas = new System.Windows.Forms.TabPage();
+            this.lbTotalMenorPercurso = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.lsbDestino = new System.Windows.Forms.ListBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -49,13 +54,20 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.lsbDestino = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lsbOrigem = new System.Windows.Forms.ListBox();
             this.pbMapa = new System.Windows.Forms.PictureBox();
             this.tpArvore = new System.Windows.Forms.TabPage();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.tabControl1.SuspendLayout();
             this.tpRotas.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbMapa)).BeginInit();
@@ -71,33 +83,123 @@
             this.tabControl1.Location = new System.Drawing.Point(2, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1326, 551);
+            this.tabControl1.Size = new System.Drawing.Size(1330, 609);
             this.tabControl1.TabIndex = 0;
             // 
             // tpRotas
             // 
+            this.tpRotas.Controls.Add(this.lbTotalMenorPercurso);
+            this.tpRotas.Controls.Add(this.label5);
+            this.tpRotas.Controls.Add(this.lsbDestino);
+            this.tpRotas.Controls.Add(this.groupBox2);
+            this.tpRotas.Controls.Add(this.groupBox1);
             this.tpRotas.Controls.Add(this.btnBuscar);
             this.tpRotas.Controls.Add(this.dataGridView2);
             this.tpRotas.Controls.Add(this.dataGridView1);
             this.tpRotas.Controls.Add(this.label4);
             this.tpRotas.Controls.Add(this.label3);
             this.tpRotas.Controls.Add(this.label2);
-            this.tpRotas.Controls.Add(this.lsbDestino);
             this.tpRotas.Controls.Add(this.label1);
             this.tpRotas.Controls.Add(this.lsbOrigem);
             this.tpRotas.Controls.Add(this.pbMapa);
             this.tpRotas.Location = new System.Drawing.Point(4, 22);
             this.tpRotas.Name = "tpRotas";
             this.tpRotas.Padding = new System.Windows.Forms.Padding(3);
-            this.tpRotas.Size = new System.Drawing.Size(1318, 525);
+            this.tpRotas.Size = new System.Drawing.Size(1322, 583);
             this.tpRotas.TabIndex = 0;
             this.tpRotas.Text = "Rotas entre cidades";
             this.tpRotas.UseVisualStyleBackColor = true;
             // 
+            // lbTotalMenorPercurso
+            // 
+            this.lbTotalMenorPercurso.AutoSize = true;
+            this.lbTotalMenorPercurso.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTotalMenorPercurso.Location = new System.Drawing.Point(1219, 559);
+            this.lbTotalMenorPercurso.Name = "lbTotalMenorPercurso";
+            this.lbTotalMenorPercurso.Size = new System.Drawing.Size(0, 15);
+            this.lbTotalMenorPercurso.TabIndex = 16;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(1045, 557);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(172, 15);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Total do menor percurso: ";
+            // 
+            // lsbDestino
+            // 
+            this.lsbDestino.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lsbDestino.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lsbDestino.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lsbDestino.FormattingEnabled = true;
+            this.lsbDestino.ItemHeight = 16;
+            this.lsbDestino.Items.AddRange(new object[] {
+            "  0 - Acheron          ",
+            "  1 - Arena           ",
+            "  2 - Arrakeen       ",
+            "  3 - Bakhuysen       ",
+            "  4 - Bradbury ",
+            "  5 - Burroughs       ",
+            "  6 - Cairo       ",
+            "  7 - Dumont",
+            "  8 - Echus Overlook",
+            "  9 - Esperança",
+            "  10 - Gondor",
+            "  11 - Lakefront",
+            "  12 - Lowell",
+            "  13 - Moria",
+            "  14 - Nicosia",
+            "  15 - Odessa",
+            "  16 - Perseverança",
+            "  17 - Rowan",
+            "  18 - Senzeni Na",
+            "  19 - Sheffield       ",
+            "  20 - Temperança",
+            "  21 - Tharsis",
+            "  22 - Underhill"});
+            this.lsbDestino.Location = new System.Drawing.Point(1180, 26);
+            this.lsbDestino.Name = "lsbDestino";
+            this.lsbDestino.Size = new System.Drawing.Size(131, 84);
+            this.lsbDestino.TabIndex = 14;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.radioButton4);
+            this.groupBox2.Controls.Add(this.radioButton5);
+            this.groupBox2.Controls.Add(this.radioButton6);
+            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox2.Location = new System.Drawing.Point(1180, 125);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(131, 100);
+            this.groupBox2.TabIndex = 13;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Método";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.radioButton3);
+            this.groupBox1.Controls.Add(this.radioButton2);
+            this.groupBox1.Controls.Add(this.radioButton1);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.Location = new System.Drawing.Point(1042, 125);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(132, 100);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Critério";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
             // btnBuscar
             // 
             this.btnBuscar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBuscar.Location = new System.Drawing.Point(1221, 190);
+            this.btnBuscar.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBuscar.Location = new System.Drawing.Point(1222, 231);
             this.btnBuscar.Name = "btnBuscar";
             this.btnBuscar.Size = new System.Drawing.Size(89, 23);
             this.btnBuscar.TabIndex = 11;
@@ -120,7 +222,7 @@
             this.dataGridViewTextBoxColumn4,
             this.dataGridViewTextBoxColumn5,
             this.dataGridViewTextBoxColumn6});
-            this.dataGridView2.Location = new System.Drawing.Point(1037, 448);
+            this.dataGridView2.Location = new System.Drawing.Point(1041, 475);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.Size = new System.Drawing.Size(277, 71);
@@ -183,10 +285,10 @@
             this.Column4,
             this.Column5,
             this.Column6});
-            this.dataGridView1.Location = new System.Drawing.Point(1037, 238);
+            this.dataGridView1.Location = new System.Drawing.Point(1044, 264);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(277, 181);
+            this.dataGridView1.Size = new System.Drawing.Size(274, 181);
             this.dataGridView1.TabIndex = 9;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
@@ -236,19 +338,21 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1034, 429);
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(1045, 457);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(82, 13);
+            this.label4.Size = new System.Drawing.Size(115, 15);
             this.label4.TabIndex = 7;
-            this.label4.Text = "Melhor caminho";
+            this.label4.Text = "Melhor caminho:";
             // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1034, 222);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(1045, 248);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(118, 13);
+            this.label3.Size = new System.Drawing.Size(158, 15);
             this.label3.TabIndex = 5;
             this.label3.Text = "Caminhos encontrados:";
             // 
@@ -256,61 +360,28 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1035, 113);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(1177, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(43, 13);
+            this.label2.Size = new System.Drawing.Size(56, 15);
             this.label2.TabIndex = 4;
             this.label2.Text = "Destino";
-            // 
-            // lsbDestino
-            // 
-            this.lsbDestino.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lsbDestino.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lsbDestino.FormattingEnabled = true;
-            this.lsbDestino.ItemHeight = 16;
-            this.lsbDestino.Items.AddRange(new object[] {
-            "  0 - Acheron          ",
-            "  1 - Arena           ",
-            "  2 - Arrakeen       ",
-            "  3 - Bakhuysen       ",
-            "  4 - Bradbury ",
-            "  5 - Burroughs       ",
-            "  6 - Cairo       ",
-            "  7 - Dumont",
-            "  8 - Echus Overlook",
-            "  9 - Esperança",
-            "  10 - Gondor",
-            "  11 - Lakefront",
-            "  12 - Lowell",
-            "  13 - Moria",
-            "  14 - Nicosia",
-            "  15 - Odessa",
-            "  16 - Perseverança",
-            "  17 - Rowan",
-            "  18 - Senzeni Na",
-            "  19 - Sheffield       ",
-            "  20 - Temperança",
-            "  21 - Tharsis",
-            "  22 - Underhill"});
-            this.lsbDestino.Location = new System.Drawing.Point(1038, 129);
-            this.lsbDestino.Name = "lsbDestino";
-            this.lsbDestino.Size = new System.Drawing.Size(177, 84);
-            this.lsbDestino.TabIndex = 3;
             // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1038, 9);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(1042, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(40, 13);
+            this.label1.Size = new System.Drawing.Size(54, 15);
             this.label1.TabIndex = 2;
             this.label1.Text = "Origem";
             // 
             // lsbOrigem
             // 
             this.lsbOrigem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lsbOrigem.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lsbOrigem.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lsbOrigem.FormattingEnabled = true;
             this.lsbOrigem.ItemHeight = 16;
             this.lsbOrigem.Items.AddRange(new object[] {
@@ -337,9 +408,9 @@
             "  20 - Temperança",
             "  21 - Tharsis",
             "  22 - Underhill"});
-            this.lsbOrigem.Location = new System.Drawing.Point(1038, 25);
+            this.lsbOrigem.Location = new System.Drawing.Point(1042, 25);
             this.lsbOrigem.Name = "lsbOrigem";
-            this.lsbOrigem.Size = new System.Drawing.Size(177, 84);
+            this.lsbOrigem.Size = new System.Drawing.Size(131, 84);
             this.lsbOrigem.TabIndex = 1;
             // 
             // pbMapa
@@ -350,7 +421,7 @@
             this.pbMapa.Image = ((System.Drawing.Image)(resources.GetObject("pbMapa.Image")));
             this.pbMapa.Location = new System.Drawing.Point(7, 7);
             this.pbMapa.Name = "pbMapa";
-            this.pbMapa.Size = new System.Drawing.Size(1024, 512);
+            this.pbMapa.Size = new System.Drawing.Size(1028, 570);
             this.pbMapa.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbMapa.TabIndex = 0;
             this.pbMapa.TabStop = false;
@@ -361,17 +432,84 @@
             this.tpArvore.Location = new System.Drawing.Point(4, 22);
             this.tpArvore.Name = "tpArvore";
             this.tpArvore.Padding = new System.Windows.Forms.Padding(3);
-            this.tpArvore.Size = new System.Drawing.Size(1318, 525);
+            this.tpArvore.Size = new System.Drawing.Size(1322, 583);
             this.tpArvore.TabIndex = 1;
             this.tpArvore.Text = "Árvore de Cidades";
             this.tpArvore.UseVisualStyleBackColor = true;
             this.tpArvore.Paint += new System.Windows.Forms.PaintEventHandler(this.tpArvore_Paint);
             // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(11, 20);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(85, 19);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "Distância";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(11, 45);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(69, 19);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.TabStop = true;
+            this.radioButton2.Text = "Tempo";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(11, 70);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(61, 19);
+            this.radioButton3.TabIndex = 2;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "Custo";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Location = new System.Drawing.Point(6, 70);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(74, 19);
+            this.radioButton4.TabIndex = 3;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "Dijkstra";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            // 
+            // radioButton5
+            // 
+            this.radioButton5.AutoSize = true;
+            this.radioButton5.Location = new System.Drawing.Point(6, 45);
+            this.radioButton5.Name = "radioButton5";
+            this.radioButton5.Size = new System.Drawing.Size(86, 19);
+            this.radioButton5.TabIndex = 4;
+            this.radioButton5.TabStop = true;
+            this.radioButton5.Text = "Recursão";
+            this.radioButton5.UseVisualStyleBackColor = true;
+            // 
+            // radioButton6
+            // 
+            this.radioButton6.AutoSize = true;
+            this.radioButton6.Location = new System.Drawing.Point(6, 20);
+            this.radioButton6.Name = "radioButton6";
+            this.radioButton6.Size = new System.Drawing.Size(65, 19);
+            this.radioButton6.TabIndex = 5;
+            this.radioButton6.TabStop = true;
+            this.radioButton6.Text = "Pilhas";
+            this.radioButton6.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1329, 554);
+            this.ClientSize = new System.Drawing.Size(1333, 612);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Projeto 3 - busca de caminhos entre cidades";
@@ -379,6 +517,10 @@
             this.tabControl1.ResumeLayout(false);
             this.tpRotas.ResumeLayout(false);
             this.tpRotas.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbMapa)).EndInit();
@@ -393,7 +535,6 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListBox lsbDestino;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox lsbOrigem;
         private System.Windows.Forms.PictureBox pbMapa;
@@ -413,6 +554,17 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn6;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ListBox lsbDestino;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label lbTotalMenorPercurso;
+        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.RadioButton radioButton5;
+        private System.Windows.Forms.RadioButton radioButton6;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
     }
 }
 
