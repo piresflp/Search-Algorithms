@@ -19,34 +19,47 @@ namespace apCaminhosMarte
         public NoArvore<Dado> Antecessor { get => antecessor; set => antecessor = value; }
 
         public Arvore() { }
-
-        public void Incluir(Dado dadoLido)
+        
+        public void Incluir(Dado novoRegistro)
         {
-            Incluir(ref raiz, dadoLido);
+            if (Existe(novoRegistro))
+                throw new Exception("Registro com chave repetida!");
+            else
+            {
+                // o novoRegistro tem uma chave inexistente, então criamos um
+                // novo nó para armazená-lo e depois ligamos esse nó na árvore
+                var novoNo = new NoArvore<Dado>(novoRegistro);
+                // se a árvore está vazia, a raiz passará a apontar esse novo nó
+                if (raiz == null)
+                    raiz = novoNo;
+                else
+                // nesse caso, antecessor aponta o pai do novo registro e
+                // verificamos em qual ramo o novo nó será ligado
+                if (novoRegistro.CompareTo(antecessor.Info) < 0) // novo é menor que antecessor
+                    antecessor.Esq = novoNo; // vamos para a esquerda
+                else
+                    antecessor.Dir = novoNo; // ou vamos para a direita
+            }
         }
-        private void Incluir(ref NoArvore<Dado> atual, Dado dadoLido)
-        {
-            if (atual == null)
-            {
-                atual = new NoArvore<Dado>(dadoLido);
-            }
-            else
-            if (dadoLido.CompareTo(atual.Info) == 0)
-                throw new Exception("Já existe esse registro!");
-            else
-            if (dadoLido.CompareTo(atual.Info) > 0)
-            {     
-                NoArvore<Dado> apDireito = atual.Dir;
-                Incluir(ref apDireito, dadoLido);
-                atual.Dir = apDireito;
-            }
-            else
-            {
-                NoArvore<Dado> apEsquerdo = atual.Esq;
-                Incluir(ref apEsquerdo, dadoLido);
 
-                atual.Esq = apEsquerdo;
+        public bool Existe(Dado procurado)
+        {
+            antecessor = null;
+            atual = raiz;
+            while (atual != null)
+            {
+                if (atual.Info.CompareTo(procurado) == 0)
+                    return true;
+                else
+                {
+                    antecessor = atual;
+                    if (procurado.CompareTo(atual.Info) < 0)
+                        atual = atual.Esq; // Desloca apontador para o ramo à esquerda
+                    else
+                        atual = atual.Dir; // Desloca apontador para o ramo à direita
+                }
             }
+            return false; // Se local == null, a chave não existe
         }
 
         public void DesenharArvore(bool primeiraVez, NoArvore<Cidade> raiz, int x, int y, double angulo, double incremento, double comprimento, Graphics g)
@@ -75,18 +88,6 @@ namespace apCaminhosMarte
         {
             return ListaOrdenada(this.Raiz);
         }
-
-        /*private List<Dado> ListaOrdenada(NoArvore<Dado> raiz)
-        {
-            List<Dado> lista = new List<Dado>();
-            if (raiz.Esq != null)
-                lista.AddRange(ListaOrdenada(raiz.Esq));
-            lista.Add(raiz.Info);
-            if (raiz.Dir != null)
-                lista.AddRange(ListaOrdenada(raiz.Esq));
-
-            return lista;
-        }*/
 
         private List<Dado> ListaOrdenada(NoArvore<Dado> raiz)
         {

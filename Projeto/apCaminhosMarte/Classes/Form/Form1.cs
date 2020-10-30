@@ -138,7 +138,11 @@ namespace apCaminhosMarte
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            gps = new GPS();
+            try
+            {
+                gps = new GPS();
+            }
+            catch(Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         private void pbMapa_Paint(object sender, PaintEventArgs e)

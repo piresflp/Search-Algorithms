@@ -56,10 +56,10 @@
     <Compile Include="Classes\Estruturas de Dados\Arvore\Arvore.cs" />
     <Compile Include="Classes\GPS\Caminho.cs" />
     <Compile Include="Classes\GPS\Cidade.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Classes\Form\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
+    <Compile Include="Classes\Form\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Classes\GPS\GPS.cs" />
@@ -72,7 +72,7 @@
     <Compile Include="Classes\Estruturas de Dados\Pilha\Exception\PilhaVaziaException.cs" />
     <Compile Include="Classes\Main\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
+    <EmbeddedResource Include="Classes\Form\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

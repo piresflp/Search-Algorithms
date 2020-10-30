@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS0169: O campo "NoArvore<Dado>.altura" nunca é usado
+dotnet_diagnostic.CS0169.severity = none
