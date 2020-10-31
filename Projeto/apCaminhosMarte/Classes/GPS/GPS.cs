@@ -18,7 +18,7 @@ namespace apCaminhosMarte
 
     enum MetodoDeBusca
     {
-        Pilha,
+        Pilhas,
         Recursao,
         Dijkstra
     }

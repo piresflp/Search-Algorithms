@@ -21,6 +21,28 @@ namespace apCaminhosMarte
 
         public Arvore() { }
 
+        public void Incluir(Dado novoRegistro)
+        {
+            if (Existe(novoRegistro))
+                throw new Exception("Registro com chave repetida!");
+            else
+            {
+                // o novoRegistro tem uma chave inexistente, então criamos um
+                // novo nó para armazená-lo e depois ligamos esse nó na árvore
+                var novoNo = new NoArvore<Dado>(novoRegistro);
+                // se a árvore está vazia, a raiz passará a apontar esse novo nó
+                if (raiz == null)
+                    raiz = novoNo;
+                else
+                // nesse caso, antecessor aponta o pai do novo registro e
+                // verificamos em qual ramo o novo nó será ligado
+                if (novoRegistro.CompareTo(antecessor.Info) < 0) // novo é menor que antecessor
+                    antecessor.Esq = novoNo; // vamos para a esquerda
+                else
+                    antecessor.Dir = novoNo; // ou vamos para a direita
+            }
+        }
+
         public NoArvore<Dado> InserirBalanceado(Dado item, NoArvore<Dado> noAtual)
         {
             if (noAtual == null)

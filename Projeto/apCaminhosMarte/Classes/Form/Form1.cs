@@ -31,50 +31,68 @@ namespace apCaminhosMarte
          * Por fim, os resultados são armazenados em listas que serão passadas como parâmetro dos métodos de exibição.
          */
         private void BtnBuscar_Click(object sender, EventArgs e)
-        {
-            lerCriterioMetodo();
-            gps.CaminhosEncontrados = new List<PilhaLista<Caminho>>();
+        {                        
             if (lsbOrigem.SelectedIndex == -1)
                 MessageBox.Show("Selecione a cidade de origem!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            if (lsbDestino.SelectedIndex == -1)
+            else if (lsbDestino.SelectedIndex == -1)
                 MessageBox.Show("Selecione a cidade de destino!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
             else
             {
-                String[] cidades = new String[23] { "Acheron", "Arena", "Arrakeen", "Bakhuysen",
+                try{
+                    gps.CaminhosEncontrados = new List<PilhaLista<Caminho>>();
+                    lerOpcoesEscolhidas();
+                    String[] cidades = new String[23] { "Acheron", "Arena", "Arrakeen", "Bakhuysen",
                                                     "Bradbury", "Burroughs", "Cairo", "Dumont", "Echus Overlook",
                                                     "Esperança", "Gondor", "Lakefront", "Lowell", "Moria", "Nicosia",
                                                     "Odessa", "Perseverança", "Rowan", "Senzeni Na", "Sheffield", "Temperança",
                                                     "Tharsis", "Underhill"};
 
-                String cidadeOrigem = cidades[lsbOrigem.SelectedIndex];
-                String cidadeDestino = cidades[lsbDestino.SelectedIndex];
-                int idOrigem = -1, idDestino = -1;
+                    String cidadeOrigem = cidades[lsbOrigem.SelectedIndex];
+                    String cidadeDestino = cidades[lsbDestino.SelectedIndex];
+                    int idOrigem = -1, idDestino = -1;
 
-                foreach (Cidade c in gps.ListaCidades)
-                {
-                    if (c.Nome.Equals(cidadeOrigem))
-                        idOrigem = c.Id;
+                    foreach (Cidade c in gps.ListaCidades) // percorre o vetor de cidades para encontrar o Id das cidades selecionadas
+                    {
+                        if (c.Nome.Equals(cidadeOrigem))
+                            idOrigem = c.Id;
 
-                    else if (c.Nome == cidadeDestino)
-                        idDestino = c.Id;
+                        else if (c.Nome == cidadeDestino)
+                            idDestino = c.Id;
 
-                    if (idOrigem != -1 && idDestino != -1) // se o Id de ambas cidades já foram encontrados
-                        break; // sai do foreach
+                        if (idOrigem != -1 && idDestino != -1) // se o Id de ambas cidades já foram encontrados
+                            break; // sai do foreach
+                    }
+
+                    MetodoDeBusca metodoEscolhido = gps.Metodo;
+                    switch (metodoEscolhido)
+                    {
+                        case MetodoDeBusca.Pilhas:
+                            break;
+
+                        case MetodoDeBusca.Recursao:
+                            gps.buscarCaminhos(idOrigem, idDestino);
+                            break;
+
+                        case MetodoDeBusca.Dijkstra:
+                            break;
+                    }
+
+                    PilhaLista<Caminho> melhorCaminho = new PilhaLista<Caminho>();
+                    List<PilhaLista<Caminho>> caminhosPossiveis = new List<PilhaLista<Caminho>>(gps.CaminhosEncontrados);
+                    List<PilhaLista<Caminho>> caminhosPossiveisClone = new List<PilhaLista<Caminho>>(caminhosPossiveis.Count);
+
+                    // clone da lista dos caminhos encontrados
+                    caminhosPossiveis.ForEach((item) =>
+                    {
+                        caminhosPossiveisClone.Add((PilhaLista<Caminho>)item.Clone());
+                    });
+
+                    melhorCaminho = buscarMelhorCaminho(caminhosPossiveis);
+                    ExibirCaminhos(caminhosPossiveisClone, melhorCaminho);
                 }
-                gps.buscarCaminhos(idOrigem, idDestino);
-                PilhaLista<Caminho> melhorCaminho = new PilhaLista<Caminho>();
-                List<PilhaLista<Caminho>> caminhosPossiveis = new List<PilhaLista<Caminho>>(gps.CaminhosEncontrados);
-                List<PilhaLista<Caminho>> caminhosPossiveisClone = new List<PilhaLista<Caminho>>(caminhosPossiveis.Count);
-
-                // clone da lista dos caminhos encontrados
-                caminhosPossiveis.ForEach((item) =>
-                {
-                    caminhosPossiveisClone.Add((PilhaLista<Caminho>)item.Clone());
-                });
-
-                melhorCaminho = buscarMelhorCaminho(caminhosPossiveis);
-                ExibirCaminhos(caminhosPossiveisClone, melhorCaminho);
+                catch(Exception ex) {
+                    MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }                
             }
         }
 
@@ -217,40 +235,57 @@ namespace apCaminhosMarte
             pbMapa.Image = Image.FromFile("mars_political_map_by_axiaterraartunion_d4vfxdf-pre.jpg");
         }
 
-        private void lerCriterioMetodo()
+        private void lerOpcoesEscolhidas()
         {
-            String rbCriterio = null, rbMetodo = null;
-            //var rb = groupBox1.Controls.OfType<RadioButton>()
+            String criterioMelhorCaminho = null, metodoDeBusca = null;
 
-            foreach(RadioButton rb in groupBox1.Controls.OfType<RadioButton>())
-            {
+            foreach(RadioButton rb in groupBox1.Controls.OfType<RadioButton>())            
                 if (rb.Checked)
-                    rbCriterio = rb.Name;
-            }
-            foreach (RadioButton rb in groupBox2.Controls.OfType<RadioButton>())
-            {
+                    criterioMelhorCaminho = rb.Name;
+            
+            foreach (RadioButton rb in groupBox2.Controls.OfType<RadioButton>())            
                 if (rb.Checked)
-                    rbMetodo = rb.Name;
-            }
-            if (rbCriterio != null && rbMetodo != null)
+                    metodoDeBusca = rb.Name;
+
+            if (criterioMelhorCaminho != null) 
             {
-                switch (rbCriterio)
+                if (metodoDeBusca != null)
                 {
-                    case "rbTempo":
-                        gps.Criterio = CriterioMelhorCaminho.Tempo;
-                        break;
+                    switch (criterioMelhorCaminho)
+                    {
+                        case "rbTempo":
+                            gps.Criterio = CriterioMelhorCaminho.Tempo;
+                            break;
 
-                    case "rbDistancia":
-                        gps.Criterio = CriterioMelhorCaminho.Distancia;
-                        break;
+                        case "rbDistancia":
+                            gps.Criterio = CriterioMelhorCaminho.Distancia;
+                            break;
 
-                    case "rbCusto":
-                        gps.Criterio = CriterioMelhorCaminho.Custo;
-                        break;
+                        case "rbCusto":
+                            gps.Criterio = CriterioMelhorCaminho.Custo;
+                            break;
+                    }
+
+                    switch(metodoDeBusca)
+                    {
+                        case "rbPilhas":
+                            gps.Metodo = MetodoDeBusca.Pilhas;
+                            break;
+
+                        case "rbRecursao":
+                            gps.Metodo = MetodoDeBusca.Recursao;
+                            break;
+
+                        case "rbDijkstra":
+                            gps.Metodo = MetodoDeBusca.Dijkstra;
+                            break;
+                    }
                 }
+                else                
+                    throw new Exception("Selecione o método de busca desejado!");     
             }
             else
-                MessageBox.Show("Selecione os criterios e o metodo de busca");
+                throw new Exception("Selecione o critério desejado!");
         }
     }
 }
