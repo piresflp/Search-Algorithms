@@ -9,6 +9,20 @@ using System.Threading.Tasks;
 
 namespace apCaminhosMarte
 {
+    enum CriterioMelhorCaminho
+    {
+        Custo,
+        Distancia,
+        Tempo
+    }
+
+    enum MetodoDeBusca
+    {
+        Pilha,
+        Recursao,
+        Dijkstra
+    }
+
     class GPS
     {
         Arvore<Cidade> arvore;
@@ -19,6 +33,8 @@ namespace apCaminhosMarte
         bool[] passou;
         int[,] grafo;
         bool semSaida = false;
+        CriterioMelhorCaminho criterio;
+        MetodoDeBusca metodo;
 
         public Arvore<Cidade> Arvore { get => arvore; set => arvore = value; }
         public List<Cidade> ListaCidades { get => listaCidades; set => listaCidades = value; }
@@ -28,6 +44,8 @@ namespace apCaminhosMarte
         public bool[] Passou { get => passou; set => passou = value; }
         public int[,] Grafo { get => grafo; set => grafo = value; }
         public bool SemSaida { get => semSaida; set => semSaida = value; }
+        public CriterioMelhorCaminho Criterio { get => criterio; set => criterio = value; }
+        public MetodoDeBusca Metodo { get => metodo; set => metodo = value; }
 
         /**
          * Construtor, cada atributo é instanciado ou tem seus dados carregados.

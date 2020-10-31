@@ -29,7 +29,7 @@ namespace apCaminhosMarte
                 int coordenadaX = int.Parse(linha.Substring(19, 5).Trim());
                 int coordenadaY = int.Parse(linha.Substring(24, 4).Trim());
                 Cidade novaCidade = new Cidade(idCidade, nome, coordenadaX, coordenadaY);
-                arvore.Incluir(novaCidade);
+                //arvore.Incluir(novaCidade);
             }
             return arvore;
         }

@@ -35,7 +35,13 @@
             this.label5 = new System.Windows.Forms.Label();
             this.lsbDestino = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.rbDijkstra = new System.Windows.Forms.RadioButton();
+            this.rbRecursao = new System.Windows.Forms.RadioButton();
+            this.rbPilhas = new System.Windows.Forms.RadioButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.rbCusto = new System.Windows.Forms.RadioButton();
+            this.rbTempo = new System.Windows.Forms.RadioButton();
+            this.rbDistancia = new System.Windows.Forms.RadioButton();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -58,12 +64,6 @@
             this.lsbOrigem = new System.Windows.Forms.ListBox();
             this.pbMapa = new System.Windows.Forms.PictureBox();
             this.tpArvore = new System.Windows.Forms.TabPage();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.tabControl1.SuspendLayout();
             this.tpRotas.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -169,9 +169,9 @@
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.radioButton4);
-            this.groupBox2.Controls.Add(this.radioButton5);
-            this.groupBox2.Controls.Add(this.radioButton6);
+            this.groupBox2.Controls.Add(this.rbDijkstra);
+            this.groupBox2.Controls.Add(this.rbRecursao);
+            this.groupBox2.Controls.Add(this.rbPilhas);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(1180, 125);
             this.groupBox2.Name = "groupBox2";
@@ -180,12 +180,45 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Método";
             // 
+            // rbDijkstra
+            // 
+            this.rbDijkstra.AutoSize = true;
+            this.rbDijkstra.Location = new System.Drawing.Point(6, 70);
+            this.rbDijkstra.Name = "rbDijkstra";
+            this.rbDijkstra.Size = new System.Drawing.Size(74, 19);
+            this.rbDijkstra.TabIndex = 3;
+            this.rbDijkstra.TabStop = true;
+            this.rbDijkstra.Text = "Dijkstra";
+            this.rbDijkstra.UseVisualStyleBackColor = true;
+            // 
+            // rbRecursao
+            // 
+            this.rbRecursao.AutoSize = true;
+            this.rbRecursao.Location = new System.Drawing.Point(6, 45);
+            this.rbRecursao.Name = "rbRecursao";
+            this.rbRecursao.Size = new System.Drawing.Size(86, 19);
+            this.rbRecursao.TabIndex = 4;
+            this.rbRecursao.TabStop = true;
+            this.rbRecursao.Text = "Recursão";
+            this.rbRecursao.UseVisualStyleBackColor = true;
+            // 
+            // rbPilhas
+            // 
+            this.rbPilhas.AutoSize = true;
+            this.rbPilhas.Location = new System.Drawing.Point(6, 20);
+            this.rbPilhas.Name = "rbPilhas";
+            this.rbPilhas.Size = new System.Drawing.Size(65, 19);
+            this.rbPilhas.TabIndex = 5;
+            this.rbPilhas.TabStop = true;
+            this.rbPilhas.Text = "Pilhas";
+            this.rbPilhas.UseVisualStyleBackColor = true;
+            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.radioButton3);
-            this.groupBox1.Controls.Add(this.radioButton2);
-            this.groupBox1.Controls.Add(this.radioButton1);
+            this.groupBox1.Controls.Add(this.rbCusto);
+            this.groupBox1.Controls.Add(this.rbTempo);
+            this.groupBox1.Controls.Add(this.rbDistancia);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(1042, 125);
             this.groupBox1.Name = "groupBox1";
@@ -193,6 +226,39 @@
             this.groupBox1.TabIndex = 12;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Critério";
+            // 
+            // rbCusto
+            // 
+            this.rbCusto.AutoSize = true;
+            this.rbCusto.Location = new System.Drawing.Point(11, 70);
+            this.rbCusto.Name = "rbCusto";
+            this.rbCusto.Size = new System.Drawing.Size(61, 19);
+            this.rbCusto.TabIndex = 2;
+            this.rbCusto.TabStop = true;
+            this.rbCusto.Text = "Custo";
+            this.rbCusto.UseVisualStyleBackColor = true;
+            // 
+            // rbTempo
+            // 
+            this.rbTempo.AutoSize = true;
+            this.rbTempo.Location = new System.Drawing.Point(11, 45);
+            this.rbTempo.Name = "rbTempo";
+            this.rbTempo.Size = new System.Drawing.Size(69, 19);
+            this.rbTempo.TabIndex = 1;
+            this.rbTempo.TabStop = true;
+            this.rbTempo.Text = "Tempo";
+            this.rbTempo.UseVisualStyleBackColor = true;
+            // 
+            // rbDistancia
+            // 
+            this.rbDistancia.AutoSize = true;
+            this.rbDistancia.Location = new System.Drawing.Point(11, 20);
+            this.rbDistancia.Name = "rbDistancia";
+            this.rbDistancia.Size = new System.Drawing.Size(85, 19);
+            this.rbDistancia.TabIndex = 0;
+            this.rbDistancia.TabStop = true;
+            this.rbDistancia.Text = "Distância";
+            this.rbDistancia.UseVisualStyleBackColor = true;
             // 
             // btnBuscar
             // 
@@ -437,72 +503,6 @@
             this.tpArvore.UseVisualStyleBackColor = true;
             this.tpArvore.Paint += new System.Windows.Forms.PaintEventHandler(this.tpArvore_Paint);
             // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(11, 20);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(85, 19);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Distância";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(11, 45);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(69, 19);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Tempo";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(11, 70);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(61, 19);
-            this.radioButton3.TabIndex = 2;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "Custo";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(6, 70);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(74, 19);
-            this.radioButton4.TabIndex = 3;
-            this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Dijkstra";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            // 
-            // radioButton5
-            // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(6, 45);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(86, 19);
-            this.radioButton5.TabIndex = 4;
-            this.radioButton5.TabStop = true;
-            this.radioButton5.Text = "Recursão";
-            this.radioButton5.UseVisualStyleBackColor = true;
-            // 
-            // radioButton6
-            // 
-            this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(6, 20);
-            this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(65, 19);
-            this.radioButton6.TabIndex = 5;
-            this.radioButton6.TabStop = true;
-            this.radioButton6.Text = "Pilhas";
-            this.radioButton6.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -557,12 +557,12 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label lbTotalMenorPercurso;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.RadioButton radioButton5;
-        private System.Windows.Forms.RadioButton radioButton6;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton rbDijkstra;
+        private System.Windows.Forms.RadioButton rbRecursao;
+        private System.Windows.Forms.RadioButton rbPilhas;
+        private System.Windows.Forms.RadioButton rbCusto;
+        private System.Windows.Forms.RadioButton rbTempo;
+        private System.Windows.Forms.RadioButton rbDistancia;
     }
 }
 

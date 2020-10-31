@@ -32,6 +32,7 @@ namespace apCaminhosMarte
          */
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
+            lerCriterioMetodo();
             gps.CaminhosEncontrados = new List<PilhaLista<Caminho>>();
             if (lsbOrigem.SelectedIndex == -1)
                 MessageBox.Show("Selecione a cidade de origem!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -214,6 +215,42 @@ namespace apCaminhosMarte
             Graphics g = pbMapa.CreateGraphics();
             g.Clear(Color.White);
             pbMapa.Image = Image.FromFile("mars_political_map_by_axiaterraartunion_d4vfxdf-pre.jpg");
+        }
+
+        private void lerCriterioMetodo()
+        {
+            String rbCriterio = null, rbMetodo = null;
+            //var rb = groupBox1.Controls.OfType<RadioButton>()
+
+            foreach(RadioButton rb in groupBox1.Controls.OfType<RadioButton>())
+            {
+                if (rb.Checked)
+                    rbCriterio = rb.Name;
+            }
+            foreach (RadioButton rb in groupBox2.Controls.OfType<RadioButton>())
+            {
+                if (rb.Checked)
+                    rbMetodo = rb.Name;
+            }
+            if (rbCriterio != null && rbMetodo != null)
+            {
+                switch (rbCriterio)
+                {
+                    case "rbTempo":
+                        gps.Criterio = CriterioMelhorCaminho.Tempo;
+                        break;
+
+                    case "rbDistancia":
+                        gps.Criterio = CriterioMelhorCaminho.Distancia;
+                        break;
+
+                    case "rbCusto":
+                        gps.Criterio = CriterioMelhorCaminho.Custo;
+                        break;
+                }
+            }
+            else
+                MessageBox.Show("Selecione os criterios e o metodo de busca");
         }
     }
 }
