@@ -37,10 +37,10 @@ namespace apCaminhosMarte
         /**
          * Método que le o arquivo "CaminhosEntreCidadesMarte.txt" e retorna os seus dados numa lista genérica de caminhos.
          */ 
-        public static List<Caminho> lerCaminhos()
+        public static List<Movimento> lerCaminhos()
         {
             StreamReader leitor = new StreamReader("CaminhosEntreCidadesMarte.txt");
-            List<Caminho> listaCaminho = new List<Caminho>();
+            List<Movimento> listaCaminho = new List<Movimento>();
             while (!leitor.EndOfStream)
             {
                 String linha = leitor.ReadLine();
@@ -50,7 +50,7 @@ namespace apCaminhosMarte
                 int tempo = int.Parse(linha.Substring(13, 4).Trim());
                 int custo = int.Parse(linha.Substring(17, 3).Trim());
 
-                Caminho caminho = new Caminho(idCidadeOrigem, idCidadeDestino, distancia, tempo, custo);
+                Movimento caminho = new Movimento(idCidadeOrigem, idCidadeDestino, distancia, tempo, custo);
                 listaCaminho.Add(caminho);
             }
             return listaCaminho;

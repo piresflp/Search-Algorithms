@@ -27,25 +27,14 @@ namespace apCaminhosMarte
     {
         Arvore<Cidade> arvore;
         List<Cidade> listaCidades;
-        List<Caminho> listaCaminhos;
-        PilhaLista<Caminho> pilhaMovimento;
-        List<PilhaLista<Caminho>> caminhosEncontrados;
+        List<Movimento> listaCaminhos;
+        PilhaLista<Movimento> pilhaMovimento;
+        List<PilhaLista<Movimento>> caminhosEncontrados;
         bool[] passou;
         int[,] grafo;
         bool semSaida = false;
         CriterioMelhorCaminho criterio;
         MetodoDeBusca metodo;
-
-        public Arvore<Cidade> Arvore { get => arvore; set => arvore = value; }
-        public List<Cidade> ListaCidades { get => listaCidades; set => listaCidades = value; }
-        public List<Caminho> ListaCaminhos { get => listaCaminhos; set => listaCaminhos = value; }
-        public PilhaLista<Caminho> PilhaMovimento { get => pilhaMovimento; set => pilhaMovimento = value; }
-        public List<PilhaLista<Caminho>> CaminhosEncontrados { get => caminhosEncontrados; set => caminhosEncontrados = value; }
-        public bool[] Passou { get => passou; set => passou = value; }
-        public int[,] Grafo { get => grafo; set => grafo = value; }
-        public bool SemSaida { get => semSaida; set => semSaida = value; }
-        public CriterioMelhorCaminho Criterio { get => criterio; set => criterio = value; }
-        public MetodoDeBusca Metodo { get => metodo; set => metodo = value; }
 
         /**
          * Construtor, cada atributo é instanciado ou tem seus dados carregados.
@@ -54,10 +43,10 @@ namespace apCaminhosMarte
         {
             Arvore = new Arvore<Cidade>();
             ListaCidades = new List<Cidade>();
-            ListaCaminhos = new List<Caminho>();
+            ListaCaminhos = new List<Movimento>();
             CarregarDados();
-            PilhaMovimento = new PilhaLista<Caminho>();
-            CaminhosEncontrados = new List<PilhaLista<Caminho>>();
+            PilhaMovimento = new PilhaLista<Movimento>();
+            CaminhosEncontrados = new List<PilhaLista<Movimento>>();
             Passou = new bool[ListaCidades.Count];
             Grafo = montarMatrizAdjacencia();
         }
@@ -85,9 +74,22 @@ namespace apCaminhosMarte
 
             for (int i = 0; i < qtdCidades; i++)
                 for (int j = 0; j < qtdCidades; j++)
-                    foreach (Caminho c in ListaCaminhos)
+                    foreach (Movimento c in ListaCaminhos)
                         if (c.IdCidadeOrigem == i && c.IdCidadeDestino == j)
-                            matriz[i, j] = c.Distancia;
+                            switch (this.Criterio)
+                            {
+                                case CriterioMelhorCaminho.Distancia:
+                                    matriz[i, j] = c.Distancia;
+                                    break;
+
+                                case CriterioMelhorCaminho.Tempo:
+                                    matriz[i, j] = c.Tempo;
+                                    break;
+
+                                case CriterioMelhorCaminho.Custo:
+                                    matriz[i, j] = c.Custo;
+                                    break;
+                            }
 
             return matriz;
         }
@@ -104,7 +106,7 @@ namespace apCaminhosMarte
             {
                 if (Grafo[idOrigem, i] != 0 && passou[i] == false)
                 {
-                    pilhaMovimento.Empilhar(new Caminho(idOrigem, i));
+                    pilhaMovimento.Empilhar(new Movimento(idOrigem, i));
                     passou[i] = true;
 
                     if (i == idDestino) // se chegou ao destino
@@ -131,15 +133,15 @@ namespace apCaminhosMarte
          * Cada caminho da lista passada como parâmetro é percorrido e tem sua distância total calculada.
          * Por fim, a pilha de retorno recebe o caminho com a menor distância total e é retornada.
          */
-        public PilhaLista<Caminho> buscarMelhorCaminho(List<PilhaLista<Caminho>> caminhos)
+        public PilhaLista<Movimento> buscarMelhorCaminho(List<PilhaLista<Movimento>> caminhos)
         {
-            PilhaLista<Caminho> ret = new PilhaLista<Caminho>();
+            PilhaLista<Movimento> ret = new PilhaLista<Movimento>();
             int menorDistancia = 0;
             int[,] matriz = this.Grafo;
 
-            foreach (PilhaLista<Caminho> caminho in caminhos)
+            foreach (PilhaLista<Movimento> caminho in caminhos)
             {
-                PilhaLista<Caminho> clone = caminho.Clone(); // clone para não desempilhar o caminho que deve ser retornado.
+                PilhaLista<Movimento> clone = caminho.Clone(); // clone para não desempilhar o caminho que deve ser retornado.
                 int distanciaTotal = 0;
                 while (!clone.EstaVazia)
                 {
@@ -156,5 +158,15 @@ namespace apCaminhosMarte
             }
             return ret;
         }
+        public Arvore<Cidade> Arvore { get => arvore; set => arvore = value; }
+        public List<Cidade> ListaCidades { get => listaCidades; set => listaCidades = value; }
+        public List<Movimento> ListaCaminhos { get => listaCaminhos; set => listaCaminhos = value; }
+        public PilhaLista<Movimento> PilhaMovimento { get => pilhaMovimento; set => pilhaMovimento = value; }
+        public List<PilhaLista<Movimento>> CaminhosEncontrados { get => caminhosEncontrados; set => caminhosEncontrados = value; }
+        public bool[] Passou { get => passou; set => passou = value; }
+        public int[,] Grafo { get => grafo; set => grafo = value; }
+        public bool SemSaida { get => semSaida; set => semSaida = value; }
+        public CriterioMelhorCaminho Criterio { get => criterio; set => criterio = value; }
+        public MetodoDeBusca Metodo { get => metodo; set => metodo = value; }
     }
 }

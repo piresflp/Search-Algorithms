@@ -14,10 +14,10 @@ using System.Windows.Forms;
 
 namespace apCaminhosMarte
 {
-    public partial class Form1 : Form
+    public partial class frmBuscaCaminhos : Form
     {
         GPS gps;
-        public Form1()
+        public frmBuscaCaminhos()
         {
             InitializeComponent();
         }
@@ -31,14 +31,15 @@ namespace apCaminhosMarte
          * Por fim, os resultados são armazenados em listas que serão passadas como parâmetro dos métodos de exibição.
          */
         private void BtnBuscar_Click(object sender, EventArgs e)
-        {         
-            try{
+        {
+            try
+            {
                 if (lsbOrigem.SelectedIndex == -1)
                     throw new Exception("Selecione a cidade de origem!");
                 if (lsbDestino.SelectedIndex == -1)
                     throw new Exception("Selecione a cidade de destino!");
-                    
-                gps.CaminhosEncontrados = new List<PilhaLista<Caminho>>();
+
+                gps.CaminhosEncontrados = new List<PilhaLista<Movimento>>();
                 lerOpcoesEscolhidas();
                 String[] cidades = new String[23] { "Acheron", "Arena", "Arrakeen", "Bakhuysen",
                                                 "Bradbury", "Burroughs", "Cairo", "Dumont", "Echus Overlook",
@@ -76,53 +77,54 @@ namespace apCaminhosMarte
                         break;
                 }
 
-                PilhaLista<Caminho> melhorCaminho = new PilhaLista<Caminho>();
-                List<PilhaLista<Caminho>> caminhosPossiveis = new List<PilhaLista<Caminho>>(gps.CaminhosEncontrados);
-                List<PilhaLista<Caminho>> caminhosPossiveisClone = new List<PilhaLista<Caminho>>(caminhosPossiveis.Count);
+                PilhaLista<Movimento> melhorCaminho = new PilhaLista<Movimento>();
+                List<PilhaLista<Movimento>> caminhosPossiveis = new List<PilhaLista<Movimento>>(gps.CaminhosEncontrados);
+                List<PilhaLista<Movimento>> caminhosPossiveisClone = new List<PilhaLista<Movimento>>(caminhosPossiveis.Count);
 
                 // clone da lista dos caminhos encontrados
                 caminhosPossiveis.ForEach((item) =>
                 {
-                    caminhosPossiveisClone.Add((PilhaLista<Caminho>)item.Clone());
+                    caminhosPossiveisClone.Add((PilhaLista<Movimento>)item.Clone());
                 });
 
                 melhorCaminho = buscarMelhorCaminho(caminhosPossiveis);
-                ExibirCaminhos(caminhosPossiveisClone, melhorCaminho);
-                }
-                catch(Exception ex) {
-                    MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }                
+                ExibirCaminhos(caminhosPossiveisClone, melhorCaminho);                
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }        
         }
+        
 
         /**
          * Método com a função de exibir os resultados para o usuário.
          * Percorre a lista de caminhos encontrados e de melhor caminho, exibindo cada passo em uma coluna do dataGridView.
          * Caso nenhuma coluna seja exibida, nenhum caminho foi encontrado e o usuário é alertado.
          */
-        private void ExibirCaminhos(List<PilhaLista<Caminho>> caminhos, PilhaLista<Caminho> melhorCaminho)
+        private void ExibirCaminhos(List<PilhaLista<Movimento>> caminhos, PilhaLista<Movimento> melhorCaminho)
         {                      
-            dataGridView1.ColumnCount = 0;
-            dataGridView1.RowCount = caminhos.Count;
+            dgvCaminhos.ColumnCount = 0;
+            dgvCaminhos.RowCount = caminhos.Count;
             int caminhosExibidos = 0;
 
             int t;
-            foreach (PilhaLista<Caminho> caminho in caminhos)
+            foreach (PilhaLista<Movimento> caminho in caminhos)
             {
                 t = caminho.Tamanho;
-                if (t > dataGridView1.ColumnCount)
+                if (t > dgvCaminhos.ColumnCount)
                 {
-                    dataGridView1.ColumnCount = t; // quantidade de columas do dataGridView se iguala ao tamanho de passos do maior caminho
+                    dgvCaminhos.ColumnCount = t; // quantidade de colunas do dataGridView se iguala ao tamanho de passos do maior caminho
                     for (int i = 0; i < t; i++)
-                        dataGridView1.Columns[i].HeaderText = "Cidade";
+                        dgvCaminhos.Columns[i].HeaderText = "Cidade";
                 }
 
 
                 // exibe cada movimento do caminho em questão
                 for (int i = t - 1; !caminho.EstaVazia; i--) 
                 {
-                    Caminho mov = (Caminho)caminho.Desempilhar();
-                    dataGridView1.Rows[caminhosExibidos].Cells[i].Value = mov.ToString();
+                    Movimento mov = (Movimento)caminho.Desempilhar();
+                    dgvCaminhos.Rows[caminhosExibidos].Cells[i].Value = mov.ToString();
                 }
                 caminhosExibidos++;
             }
@@ -130,18 +132,18 @@ namespace apCaminhosMarte
             if (melhorCaminho.Tamanho > 0) // se a lista de melhorCaminho não estiver vazia
             {
                 t = melhorCaminho.Tamanho;
-                dataGridView2.ColumnCount = t;
-                dataGridView2.RowCount = 1;
+                dgvMelhorCaminho.ColumnCount = t;
+                dgvMelhorCaminho.RowCount = 1;
                 for (int i = t - 1; !melhorCaminho.EstaVazia; i--) // exibe cada movimento do melhor caminho
                 {
-                    Caminho mov = melhorCaminho.Desempilhar();
-                    dataGridView2.Rows[0].Cells[i].Value = mov.ToString();
+                    Movimento mov = melhorCaminho.Desempilhar();
+                    dgvMelhorCaminho.Rows[0].Cells[i].Value = mov.ToString();
                 }
             }
             else // se nenhum caminho foi encontrado, o usuário é alertado e os dataGridViews limpados
             {
                 limparPictureBox();
-                dataGridView2.RowCount = 0;
+                dgvMelhorCaminho.RowCount = 0;
                 MessageBox.Show("Não foi encontrado nenhum caminho.");
             }
         }
@@ -149,7 +151,7 @@ namespace apCaminhosMarte
         /**
          * Chama o método que busca o melhor caminho, da classe GPS.
          */
-        private PilhaLista<Caminho> buscarMelhorCaminho(List<PilhaLista<Caminho>> caminhos)
+        private PilhaLista<Movimento> buscarMelhorCaminho(List<PilhaLista<Movimento>> caminhos)
         {
             return gps.buscarMelhorCaminho(caminhos);
         }
@@ -183,13 +185,13 @@ namespace apCaminhosMarte
         {
             limparPictureBox();
             Application.DoEvents();
-            desenharCaminho(this.gps.CaminhosEncontrados[dataGridView1.CurrentCell.RowIndex]);
+            desenharCaminho(this.gps.CaminhosEncontrados[dgvCaminhos.CurrentCell.RowIndex]);
         }
 
         /**
          * Método responsável por desenhar as retas ligando cada movimento do caminho passado como parâmetro.
          */
-        private void desenharCaminho(PilhaLista<Caminho> caminho)
+        private void desenharCaminho(PilhaLista<Movimento> caminho)
         {
             if (caminho != null)
             {
@@ -198,7 +200,7 @@ namespace apCaminhosMarte
 
                 int xProporcional = 4096 / pbMapa.Width;
                 int yProporcional = 2048 / pbMapa.Height;
-                PilhaLista<Caminho> clone = caminho.Clone();
+                PilhaLista<Movimento> clone = caminho.Clone();
                 int cordXOrigem = 0;
                 int cordYOrigem = 0;
                 int cordXDestino = 0;
