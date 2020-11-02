@@ -16,55 +16,35 @@ namespace apCaminhosMarte
         protected NoArvore<Dado> raiz, atual, antecessor;
 
         public Arvore() { }
-
-        public void Incluir(Dado novoRegistro)
-        {
-            if (Existe(novoRegistro))
-                throw new Exception("Registro com chave repetida!");
-            else
-            {
-                // o novoRegistro tem uma chave inexistente, então criamos um
-                // novo nó para armazená-lo e depois ligamos esse nó na árvore
-                var novoNo = new NoArvore<Dado>(novoRegistro);
-                // se a árvore está vazia, a raiz passará a apontar esse novo nó
-                if (raiz == null)
-                    raiz = novoNo;
-                else
-                // nesse caso, antecessor aponta o pai do novo registro e
-                // verificamos em qual ramo o novo nó será ligado
-                if (novoRegistro.CompareTo(antecessor.Info) < 0) // novo é menor que antecessor
-                    antecessor.Esq = novoNo; // vamos para a esquerda
-                else
-                    antecessor.Dir = novoNo; // ou vamos para a direita
-            }
-        }
-
         public NoArvore<Dado> InserirBalanceado(Dado item, NoArvore<Dado> noAtual)
         {
             if (noAtual == null)
+            {
                 noAtual = new NoArvore<Dado>(item);
+            }
             else
             {
                 if (item.CompareTo(noAtual.Info) < 0)
                 {
                     noAtual.Esq = InserirBalanceado(item, noAtual.Esq);
-                    if (getAltura(noAtual.Esq) - getAltura(noAtual.Dir) == 2) // getAltura testa nulo
+                    if (getAltura(noAtual.Esq) - getAltura(noAtual.Dir) == 2)  // a propriedade Altura testa nulo!
                         if (item.CompareTo(noAtual.Esq.Info) < 0)
                             noAtual = RotacaoSimplesComFilhoEsquerdo(noAtual);
                         else
                             noAtual = RotacaoDuplaComFilhoEsquerdo(noAtual);
                 }
                 else
-                if (item.CompareTo(noAtual.Info) > 0)
+                  if (item.CompareTo(noAtual.Info) > 0)
                 {
                     noAtual.Dir = InserirBalanceado(item, noAtual.Dir);
-                    if (getAltura(noAtual.Dir) - getAltura(noAtual.Esq) == 2) // getAltura testa nulo
+                    if (getAltura(noAtual.Dir) - getAltura(noAtual.Esq) == 2)  // a propriedade Altura testa nulo!
                         if (item.CompareTo(noAtual.Dir.Info) > 0)
                             noAtual = RotacaoSimplesComFilhoDireito(noAtual);
                         else
                             noAtual = RotacaoDuplaComFilhoDireito(noAtual);
                 }
                 //else ; - não faz nada, valor duplicado
+
                 noAtual.Altura = Math.Max(getAltura(noAtual.Esq), getAltura(noAtual.Dir)) + 1;
             }
             return noAtual;
@@ -89,11 +69,13 @@ namespace apCaminhosMarte
             temp.Altura = Math.Max(getAltura(temp.Dir), getAltura(no)) + 1;
             return temp;
         }
+
         private NoArvore<Dado> RotacaoDuplaComFilhoEsquerdo(NoArvore<Dado> no)
         {
             no.Esq = RotacaoSimplesComFilhoDireito(no.Esq);
             return RotacaoSimplesComFilhoEsquerdo(no);
         }
+
         private NoArvore<Dado> RotacaoDuplaComFilhoDireito(NoArvore<Dado> no)
         {
             no.Dir = RotacaoSimplesComFilhoEsquerdo(no.Dir);

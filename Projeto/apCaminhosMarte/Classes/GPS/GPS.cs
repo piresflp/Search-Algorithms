@@ -33,7 +33,7 @@ namespace apCaminhosMarte
         List<Caminho> caminhosEncontrados;
         bool[] jaPassou;
         int[,] matrizAdjacencia;
-        bool semSaida = false;
+        bool semSaida;
         CriterioMelhorCaminho criterio;
         MetodoDeBusca metodo;
 
@@ -42,24 +42,18 @@ namespace apCaminhosMarte
          */
         public GPS()
         {
-            Arvore = new Arvore<Cidade>();
-            ListaCidades = new List<Cidade>();
-            ListaCaminhos = new List<Movimento>();
-            CarregarDados();
-            PilhaMovimento = new PilhaLista<Movimento>();
-            CaminhosEncontrados = new List<Caminho>();
-            JaPassou = new bool[ListaCidades.Count];
-            MatrizAdjacencia = montarMatrizAdjacencia();
-        }
+            arvore = new Arvore<Cidade>();
+            listaCidades = new List<Cidade>();
+            listaCaminhos = new List<Movimento>();
+            pilhaMovimento = new PilhaLista<Movimento>();
+            caminhosEncontrados = new List<Caminho>();
 
-        /**
-         *  Método responsável por chamar os métodos da classe Leitor, que lêem os dados do arquivo texto, e carregar a resposta em seus devidos atributos
-         **/
-        private void CarregarDados()
-        {
-            Arvore = Leitor.lerCidades();
-            ListaCidades = Arvore.getListaOrdenada();
-            ListaCaminhos = Leitor.lerCaminhos();
+            arvore = Leitor.lerCidades();
+            listaCidades = arvore.getListaOrdenada();
+            listaCaminhos = Leitor.lerMovimentos();
+            
+            jaPassou = new bool[listaCidades.Count];
+            matrizAdjacencia = montarMatrizAdjacencia();
         }
 
         /**
@@ -70,14 +64,14 @@ namespace apCaminhosMarte
          */
         public int[,] montarMatrizAdjacencia()
         {
-            int qtdCidades = ListaCidades.Count;
+            int qtdCidades = listaCidades.Count;
             int[,] matriz = new int[qtdCidades, qtdCidades];
 
             for (int i = 0; i < qtdCidades; i++)
                 for (int j = 0; j < qtdCidades; j++)
                     foreach (Movimento c in ListaCaminhos)
                         if (c.IdCidadeOrigem == i && c.IdCidadeDestino == j)
-                            switch (this.Criterio)
+                            switch (this.criterio)
                             {
                                 case CriterioMelhorCaminho.Distancia:
                                     matriz[i, j] = c.Distancia;
@@ -103,9 +97,9 @@ namespace apCaminhosMarte
          */
         public void buscarCaminhos(int idCidadeOrigem, int idCidadeDestino)
         {
-            for (int i = 0; i < ListaCidades.Count; i++)
+            for (int i = 0; i < listaCidades.Count; i++)
             {
-                if (MatrizAdjacencia[idCidadeOrigem, i] != 0 && jaPassou[i] == false)
+                if (matrizAdjacencia[idCidadeOrigem, i] != 0 && jaPassou[i] == false)
                 {
                     pilhaMovimento.Empilhar(new Movimento(idCidadeOrigem, i));
                     jaPassou[i] = true;
@@ -114,7 +108,7 @@ namespace apCaminhosMarte
                     {
                         Caminho novoCaminho = new Caminho();
                         novoCaminho.Movimentos = pilhaMovimento.Clone();
-                        CaminhosEncontrados.Add(novoCaminho);
+                        caminhosEncontrados.Add(novoCaminho);
                         pilhaMovimento.Desempilhar(); // busca novos caminhos
                         jaPassou[i] = false;
                     }
@@ -140,7 +134,6 @@ namespace apCaminhosMarte
         {
             Caminho ret = new Caminho();
             int menorCriterio = 0; // critério -> distância, tempo ou custo (o que for escolhido pelo usuário)
-            int[,] matriz = this.MatrizAdjacencia;
 
             foreach (Caminho caminho in caminhos)
             {
@@ -150,13 +143,14 @@ namespace apCaminhosMarte
                 {
                     int idCidadeOrigem = caminhoClone.Movimentos.OTopo().IdCidadeOrigem;
                     int idCidadeDestino = caminhoClone.Movimentos.OTopo().IdCidadeDestino;
-                    criterioTotal += matriz[idCidadeOrigem, idCidadeDestino];
+                    criterioTotal += matrizAdjacencia[idCidadeOrigem, idCidadeDestino];
                     caminhoClone.removerMovimento();
                 }
                 if (criterioTotal < menorCriterio || menorCriterio == 0) // se a distância total do caminho em questão for menor que todas as outras até o momento
                 {
-                    ret = caminho.Clone(); 
+                    ret = caminho.Clone();
                     menorCriterio = criterioTotal;
+                    ret.CriterioTotal = menorCriterio;
                 }
             }
             return ret;

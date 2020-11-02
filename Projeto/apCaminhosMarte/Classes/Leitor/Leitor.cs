@@ -21,6 +21,7 @@ namespace apCaminhosMarte
         {
             StreamReader leitor = new StreamReader("CidadesMarte.txt");
             Arvore<Cidade> arvore = new Arvore<Cidade>();
+
             while (!leitor.EndOfStream)
             {
                 String linha = leitor.ReadLine();
@@ -29,7 +30,7 @@ namespace apCaminhosMarte
                 int coordenadaX = int.Parse(linha.Substring(19, 5).Trim());
                 int coordenadaY = int.Parse(linha.Substring(24, 4).Trim());
                 Cidade novaCidade = new Cidade(idCidade, nome, coordenadaX, coordenadaY);
-                arvore.Incluir(novaCidade);
+                arvore.Raiz = arvore.InserirBalanceado(novaCidade, arvore.Raiz);
             }
             return arvore;
         }
@@ -37,7 +38,7 @@ namespace apCaminhosMarte
         /**
          * Método que le o arquivo "CaminhosEntreCidadesMarte.txt" e retorna os seus dados numa lista genérica de caminhos.
          */ 
-        public static List<Movimento> lerCaminhos()
+        public static List<Movimento> lerMovimentos()
         {
             StreamReader leitor = new StreamReader("CaminhosEntreCidadesMarte.txt");
             List<Movimento> listaCaminho = new List<Movimento>();

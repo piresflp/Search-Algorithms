@@ -195,6 +195,7 @@ namespace apCaminhosMarte
                     Movimento mov = melhorCaminho.removerMovimento();
                     dgvMelhorCaminho.Rows[0].Cells[i].Value = mov.ToString();
                 }
+                lbTotalMenorPercurso.Text = melhorCaminho.CriterioTotal.ToString();
             }
             else // se nenhum caminho foi encontrado, o usuário é alertado e os dataGridViews limpados
             {
