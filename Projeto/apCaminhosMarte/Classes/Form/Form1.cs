@@ -1,6 +1,7 @@
 ﻿// 19169 - Felipe Pires Araujo
 // 19196 - Rafael Romanhole Borrozino
 
+using apCaminhosMarte.Classes.GPS;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,34 +35,9 @@ namespace apCaminhosMarte
         {
             try
             {
-                if (lsbOrigem.SelectedIndex == -1)
-                    throw new Exception("Selecione a cidade de origem!");
-                if (lsbDestino.SelectedIndex == -1)
-                    throw new Exception("Selecione a cidade de destino!");
-
-                gps.CaminhosEncontrados = new List<PilhaLista<Movimento>>();
-                lerOpcoesEscolhidas();
-                String[] cidades = new String[23] { "Acheron", "Arena", "Arrakeen", "Bakhuysen",
-                                                "Bradbury", "Burroughs", "Cairo", "Dumont", "Echus Overlook",
-                                                "Esperança", "Gondor", "Lakefront", "Lowell", "Moria", "Nicosia",
-                                                "Odessa", "Perseverança", "Rowan", "Senzeni Na", "Sheffield", "Temperança",
-                                                "Tharsis", "Underhill"};
-
-                String cidadeOrigem = cidades[lsbOrigem.SelectedIndex];
-                String cidadeDestino = cidades[lsbDestino.SelectedIndex];
-                int idOrigem = -1, idDestino = -1;
-
-                foreach (Cidade c in gps.ListaCidades) // percorre o vetor de cidades para encontrar o Id das cidades selecionadas
-                {
-                    if (c.Nome.Equals(cidadeOrigem))
-                        idOrigem = c.Id;
-
-                    else if (c.Nome == cidadeDestino)
-                        idDestino = c.Id;
-
-                    if (idOrigem != -1 && idDestino != -1) // se o Id de ambas cidades já foram encontrados
-                        break; // sai do foreach
-                }
+                int idCidadeOrigem = -1, idCidadeDestino = -1;
+                lerCidadesSelecionadas(ref idCidadeOrigem, ref idCidadeDestino);
+                lerRadioButtonsSelecionados();
 
                 MetodoDeBusca metodoEscolhido = gps.Metodo;
                 switch (metodoEscolhido)
@@ -70,7 +46,7 @@ namespace apCaminhosMarte
                         break;
 
                     case MetodoDeBusca.Recursao:
-                        gps.buscarCaminhos(idOrigem, idDestino);
+                        gps.buscarCaminhos(idCidadeOrigem, idCidadeDestino);
                         break;
 
                     case MetodoDeBusca.Dijkstra:
@@ -96,6 +72,87 @@ namespace apCaminhosMarte
             }        
         }
         
+        private void lerCidadesSelecionadas(ref int idCidadeOrigem, ref int idCidadeDestino)
+        {
+            if (lsbOrigem.SelectedIndex == -1)
+                throw new Exception("Selecione a cidade de origem!");
+            if (lsbDestino.SelectedIndex == -1)
+                throw new Exception("Selecione a cidade de destino!");
+
+            gps.CaminhosEncontrados = new List<PilhaLista<Movimento>>();
+
+            String[] cidades = new String[23] { "Acheron", "Arena", "Arrakeen", "Bakhuysen",
+                                                "Bradbury", "Burroughs", "Cairo", "Dumont", "Echus Overlook",
+                                                "Esperança", "Gondor", "Lakefront", "Lowell", "Moria", "Nicosia",
+                                                "Odessa", "Perseverança", "Rowan", "Senzeni Na", "Sheffield", "Temperança",
+                                                "Tharsis", "Underhill"};
+
+            String cidadeOrigem = cidades[lsbOrigem.SelectedIndex];
+            String cidadeDestino = cidades[lsbDestino.SelectedIndex];
+
+            foreach (Cidade c in gps.ListaCidades) // percorre o vetor de cidades para encontrar o Id das cidades selecionadas
+            {
+                if (c.Nome.Equals(cidadeOrigem))
+                    idCidadeOrigem = c.Id;
+
+                else if (c.Nome == cidadeDestino)
+                    idCidadeDestino = c.Id;
+
+                if (idCidadeOrigem != -1 && idCidadeDestino != -1) // se o Id de ambas cidades já foram encontrados
+                    break; // sai do foreach
+            }
+            if (idCidadeOrigem == -1 && idCidadeDestino == -1)
+                throw new Exception("Erro ao descobrir Id de alguma das cidades selecionadas.");
+        }
+
+        private void lerRadioButtonsSelecionados()
+        {
+            String criterioMelhorCaminho = null, metodoDeBusca = null;
+
+            foreach (RadioButton rb in groupBox1.Controls.OfType<RadioButton>())
+                if (rb.Checked)
+                    criterioMelhorCaminho = rb.Name;
+
+            foreach (RadioButton rb in groupBox2.Controls.OfType<RadioButton>())
+                if (rb.Checked)
+                    metodoDeBusca = rb.Name;
+
+            if (criterioMelhorCaminho == null) // se nenhum botão foi selecionado pelo usuário
+                throw new Exception("Selecione o critério desejado!");
+
+            if (metodoDeBusca == null) // se nenhum botão foi selecionado pelo usuário
+                throw new Exception("Selecione o método de busca desejado!");
+
+            switch (criterioMelhorCaminho)
+            {
+                case "rbTempo":
+                    gps.Criterio = CriterioMelhorCaminho.Tempo;
+                    break;
+
+                case "rbDistancia":
+                    gps.Criterio = CriterioMelhorCaminho.Distancia;
+                    break;
+
+                case "rbCusto":
+                    gps.Criterio = CriterioMelhorCaminho.Custo;
+                    break;
+            }
+
+            switch (metodoDeBusca)
+            {
+                case "rbPilhas":
+                    gps.Metodo = MetodoDeBusca.Pilhas;
+                    break;
+
+                case "rbRecursao":
+                    gps.Metodo = MetodoDeBusca.Recursao;
+                    break;
+
+                case "rbDijkstra":
+                    gps.Metodo = MetodoDeBusca.Dijkstra;
+                    break;
+            }
+        }
 
         /**
          * Método com a função de exibir os resultados para o usuário.
@@ -234,55 +291,6 @@ namespace apCaminhosMarte
             Graphics g = pbMapa.CreateGraphics();
             g.Clear(Color.White);
             pbMapa.Image = Image.FromFile("mars_political_map_by_axiaterraartunion_d4vfxdf-pre.jpg");
-        }
-
-        private void lerOpcoesEscolhidas()
-        {
-            String criterioMelhorCaminho = null, metodoDeBusca = null;
-
-            foreach(RadioButton rb in groupBox1.Controls.OfType<RadioButton>())            
-                if (rb.Checked)
-                    criterioMelhorCaminho = rb.Name;
-            
-            foreach (RadioButton rb in groupBox2.Controls.OfType<RadioButton>())            
-                if (rb.Checked)
-                    metodoDeBusca = rb.Name;
-
-            if (criterioMelhorCaminho == null) // se nenhum botão foi selecionado pelo usuário
-                throw new Exception("Selecione o critério desejado!");
-                
-            if (metodoDeBusca == null) // se nenhum botão foi selecionado pelo usuário
-                throw new Exception("Selecione o método de busca desejado!");               
-        
-            switch (criterioMelhorCaminho)
-            {
-                case "rbTempo":
-                    gps.Criterio = CriterioMelhorCaminho.Tempo;
-                    break;
-
-                case "rbDistancia":
-                    gps.Criterio = CriterioMelhorCaminho.Distancia;
-                    break;
-
-                case "rbCusto":
-                    gps.Criterio = CriterioMelhorCaminho.Custo;
-                    break;
-            }
-
-            switch(metodoDeBusca)
-            {
-                case "rbPilhas":
-                    gps.Metodo = MetodoDeBusca.Pilhas;
-                    break;
-
-                case "rbRecursao":
-                    gps.Metodo = MetodoDeBusca.Recursao;
-                    break;
-
-                case "rbDijkstra":
-                    gps.Metodo = MetodoDeBusca.Dijkstra;
-                    break;
-            }
         }
     }
 }

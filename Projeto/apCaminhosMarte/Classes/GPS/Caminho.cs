@@ -27,10 +27,12 @@ namespace apCaminhosMarte.Classes.GPS
             this.Movimentos.Empilhar(mov);            
         }
 
-        public void removerMovimento(Movimento mov)
+        public void removerMovimento()
         {
             if (this.Movimentos.EstaVazia)
                 throw new Exception("Pilha vazia!");
+
+            this.Movimentos.Desempilhar();
         }
 
         public int CompareTo(Caminho outro)
