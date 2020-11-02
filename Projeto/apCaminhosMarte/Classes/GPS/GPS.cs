@@ -1,6 +1,7 @@
 ﻿// 19169 - Felipe Pires Araujo
 // 19196 - Rafael Romanhole Borrozino
 
+using apCaminhosMarte.Classes.GPS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +30,9 @@ namespace apCaminhosMarte
         List<Cidade> listaCidades;
         List<Movimento> listaCaminhos;
         PilhaLista<Movimento> pilhaMovimento;
-        List<PilhaLista<Movimento>> caminhosEncontrados;
-        bool[] passou;
-        int[,] grafo;
+        List<Caminho> caminhosEncontrados;
+        bool[] jaPassou;
+        int[,] matrizAdjacencia;
         bool semSaida = false;
         CriterioMelhorCaminho criterio;
         MetodoDeBusca metodo;
@@ -46,9 +47,9 @@ namespace apCaminhosMarte
             ListaCaminhos = new List<Movimento>();
             CarregarDados();
             PilhaMovimento = new PilhaLista<Movimento>();
-            CaminhosEncontrados = new List<PilhaLista<Movimento>>();
-            Passou = new bool[ListaCidades.Count];
-            Grafo = montarMatrizAdjacencia();
+            CaminhosEncontrados = new List<Caminho>();
+            JaPassou = new bool[ListaCidades.Count];
+            MatrizAdjacencia = montarMatrizAdjacencia();
         }
 
         /**
@@ -62,7 +63,7 @@ namespace apCaminhosMarte
         }
 
         /**
-         * Método que retorna a matriz de adjacência, que representa o grafo de cidades.
+         * Método que retorna a matriz de adjacência, que representa o matrizAdjacencia de cidades.
          * Primeiramente, é criada uma matriz com o tamanho máximo equivalente à quantidade de cidades nos arquivos texto.
          * Após isso, são usados 2 "for" para percorrer os elementos da lista de caminho e verificar se existem caminhos equivalentes ao índices.
          * Se sim, a distância do caminho é armazenada na matriz de adjacência.
@@ -100,29 +101,31 @@ namespace apCaminhosMarte
          * Por fim, se chegou ao destino, a pilha é armazenada na variável "caminhosEncontrados", representando um dos caminhos possíveis
          * O método acaba quando todos os caminhos possíveis são percorridos.
          */
-        public void buscarCaminhos(int idOrigem, int idDestino)
+        public void buscarCaminhos(int idCidadeOrigem, int idCidadeDestino)
         {
             for (int i = 0; i < ListaCidades.Count; i++)
             {
-                if (Grafo[idOrigem, i] != 0 && passou[i] == false)
+                if (MatrizAdjacencia[idCidadeOrigem, i] != 0 && jaPassou[i] == false)
                 {
-                    pilhaMovimento.Empilhar(new Movimento(idOrigem, i));
-                    passou[i] = true;
+                    pilhaMovimento.Empilhar(new Movimento(idCidadeOrigem, i));
+                    jaPassou[i] = true;
 
-                    if (i == idDestino) // se chegou ao destino
+                    if (i == idCidadeDestino) // se chegou ao destino
                     {
-                        caminhosEncontrados.Add(pilhaMovimento.Clone());
+                        Caminho novoCaminho = new Caminho();
+                        novoCaminho.Movimentos = pilhaMovimento.Clone();
+                        CaminhosEncontrados.Add(novoCaminho);
                         pilhaMovimento.Desempilhar(); // busca novos caminhos
-                        passou[i] = false;
+                        jaPassou[i] = false;
                     }
                     else
-                        buscarCaminhos(i, idDestino); // backtracking
+                        buscarCaminhos(i, idCidadeDestino); // backtracking
                 }
             }
             if (!pilhaMovimento.EstaVazia)
             {
                 pilhaMovimento.Desempilhar();
-                passou[idOrigem] = false;
+                jaPassou[idCidadeOrigem] = false;
             }
         }
 
@@ -130,30 +133,30 @@ namespace apCaminhosMarte
          * Método que retorna o melhor caminho entre duas cidades.
          * É passado como parâmetro a lista "caminhos", que representa todos os caminhos possíveis entre determinadas cidades.
          * Dessa forma, são declarados uma Pilha de retorno e uma matriz, que representará a matriz de adjacência.
-         * Cada caminho da lista passada como parâmetro é percorrido e tem sua distância total calculada.
-         * Por fim, a pilha de retorno recebe o caminho com a menor distância total e é retornada.
+         * Cada caminho da lista passada como parâmetro é percorrido e tem seu critério (distância, tempo ou custo) total calculado.
+         * Por fim, a pilha de retorno recebe o caminho com o menor critério total e é retornado.
          */
-        public PilhaLista<Movimento> buscarMelhorCaminho(List<PilhaLista<Movimento>> caminhos)
+        public Caminho buscarMelhorCaminho(List<Caminho> caminhos)
         {
-            PilhaLista<Movimento> ret = new PilhaLista<Movimento>();
-            int menorDistancia = 0;
-            int[,] matriz = this.Grafo;
+            Caminho ret = new Caminho();
+            int menorCriterio = 0; // critério -> distância, tempo ou custo (o que for escolhido pelo usuário)
+            int[,] matriz = this.MatrizAdjacencia;
 
-            foreach (PilhaLista<Movimento> caminho in caminhos)
+            foreach (Caminho caminho in caminhos)
             {
-                PilhaLista<Movimento> clone = caminho.Clone(); // clone para não desempilhar o caminho que deve ser retornado.
-                int distanciaTotal = 0;
-                while (!clone.EstaVazia)
+                Caminho caminhoClone = caminho.Clone(); // caminhoClone para não desempilhar o caminho que deve ser retornado.
+                int criterioTotal = 0;
+                while (!caminhoClone.Movimentos.EstaVazia)
                 {
-                    int idOrigem = clone.OTopo().IdCidadeOrigem;
-                    int idDestino = clone.OTopo().IdCidadeDestino;
-                    distanciaTotal += matriz[idOrigem, idDestino];
-                    clone.Desempilhar();
+                    int idCidadeOrigem = caminhoClone.Movimentos.OTopo().IdCidadeOrigem;
+                    int idCidadeDestino = caminhoClone.Movimentos.OTopo().IdCidadeDestino;
+                    criterioTotal += matriz[idCidadeOrigem, idCidadeDestino];
+                    caminhoClone.removerMovimento();
                 }
-                if (distanciaTotal < menorDistancia || menorDistancia == 0) // se a distância total do caminho em questão for menor que todas as outras até o momento
+                if (criterioTotal < menorCriterio || menorCriterio == 0) // se a distância total do caminho em questão for menor que todas as outras até o momento
                 {
                     ret = caminho.Clone(); 
-                    menorDistancia = distanciaTotal;
+                    menorCriterio = criterioTotal;
                 }
             }
             return ret;
@@ -162,9 +165,9 @@ namespace apCaminhosMarte
         public List<Cidade> ListaCidades { get => listaCidades; set => listaCidades = value; }
         public List<Movimento> ListaCaminhos { get => listaCaminhos; set => listaCaminhos = value; }
         public PilhaLista<Movimento> PilhaMovimento { get => pilhaMovimento; set => pilhaMovimento = value; }
-        public List<PilhaLista<Movimento>> CaminhosEncontrados { get => caminhosEncontrados; set => caminhosEncontrados = value; }
-        public bool[] Passou { get => passou; set => passou = value; }
-        public int[,] Grafo { get => grafo; set => grafo = value; }
+        public List<Caminho> CaminhosEncontrados { get => caminhosEncontrados; set => caminhosEncontrados = value; }
+        public bool[] JaPassou { get => jaPassou; set => jaPassou = value; }
+        public int[,] MatrizAdjacencia { get => matrizAdjacencia; set => matrizAdjacencia = value; }
         public bool SemSaida { get => semSaida; set => semSaida = value; }
         public CriterioMelhorCaminho Criterio { get => criterio; set => criterio = value; }
         public MetodoDeBusca Metodo { get => metodo; set => metodo = value; }
