@@ -11,7 +11,10 @@ namespace apCaminhosMarte.Classes.GPS
         PilhaLista<Movimento> movimentos;
         int pesoTotal;
 
-        public Caminho() { }
+        public Caminho() 
+        {
+            this.movimentos = new PilhaLista<Movimento>();
+        }
 
         public Caminho(PilhaLista<Movimento> movimentos)
         {

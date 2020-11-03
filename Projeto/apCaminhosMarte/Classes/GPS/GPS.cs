@@ -82,7 +82,7 @@ namespace apCaminhosMarte
          * Por fim, se chegou ao destino, a pilha é armazenada na variável "caminhosEncontrados", representando um dos caminhos possíveis
          * O método acaba quando todos os caminhos possíveis são percorridos.
          */
-        public void buscarCaminhos(int idCidadeOrigem, int idCidadeDestino)
+        public void buscarCaminhosRecursivo(int idCidadeOrigem, int idCidadeDestino)
         {
             for (int i = 0; i < listaCidades.Count; i++)
             {
@@ -100,13 +100,79 @@ namespace apCaminhosMarte
                         jaPassou[i] = false;
                     }
                     else
-                        buscarCaminhos(i, idCidadeDestino); // backtracking
+                        buscarCaminhosRecursivo(i, idCidadeDestino); // backtracking
                 }
             }
             if (!pilhaMovimento.EstaVazia)
             {
                 pilhaMovimento.Desempilhar();
                 jaPassou[idCidadeOrigem] = false;
+            }
+        }
+
+        public void buscarCaminhosPilhas(int idCidadeOrigem, int idCidadeDestino)
+        {
+            int cidadeAtual = idCidadeOrigem;
+            int saidaAtual = 0;
+            int qtdCidades = listaCidades.Count;
+            bool achouCaminho = false;
+
+            for (int indice = 0; indice < qtdCidades; indice++)
+                jaPassou[indice] = false;
+
+            var pilha = new Caminho();
+            while (!semSaida)
+            {
+                semSaida = (cidadeAtual == idCidadeOrigem && saidaAtual == qtdCidades && pilha.Movimentos.EstaVazia);
+                if (!semSaida)
+                {
+                    while ((saidaAtual < qtdCidades) && !achouCaminho)
+                    {
+                        if (matrizAdjacencia[cidadeAtual, saidaAtual] == null)
+                            saidaAtual++;
+
+                        else if (jaPassou[saidaAtual])
+                            saidaAtual++;
+
+                        else if (saidaAtual == idCidadeDestino)
+                        {
+                            pilha.adicionarMovimento(new Movimento(cidadeAtual, saidaAtual));
+                            achouCaminho = true;
+                        }
+
+                        else
+                        {
+                            pilha.adicionarMovimento(new Movimento(cidadeAtual, saidaAtual));
+                            jaPassou[cidadeAtual] = true;
+                            cidadeAtual = saidaAtual;
+                            saidaAtual = 0;
+                        }
+                    }
+                }
+
+                if (!achouCaminho)
+                    if (!pilha.Movimentos.EstaVazia)
+                    {
+                        Movimento movimento = pilha.removerMovimento();
+                        saidaAtual = movimento.IdCidadeDestino;
+                        cidadeAtual = movimento.IdCidadeOrigem;
+                        saidaAtual++;
+                    }
+
+                Caminho saida = new Caminho();
+                if (achouCaminho)
+                {
+                    Caminho clone = pilha.Clone();
+                    while (!clone.Movimentos.EstaVazia)
+                    {
+                        Movimento movimento = clone.removerMovimento();
+                        saida.Movimentos.Empilhar(movimento);
+                    }
+                    caminhosEncontrados.Add(saida);
+                    achouCaminho = false;
+                    pilha.removerMovimento();
+                    saidaAtual++;
+                }
             }
         }
 

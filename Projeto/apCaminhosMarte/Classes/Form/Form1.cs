@@ -44,13 +44,15 @@ namespace apCaminhosMarte
                 switch (metodoEscolhido)
                 {
                     case MetodoDeBusca.Pilhas:
+                        gps.buscarCaminhosPilhas(idCidadeOrigem, idCidadeDestino);
                         break;
 
                     case MetodoDeBusca.Recursao:
-                        gps.buscarCaminhos(idCidadeOrigem, idCidadeDestino);
+                        gps.buscarCaminhosRecursivo(idCidadeOrigem, idCidadeDestino);
                         break;
 
                     case MetodoDeBusca.Dijkstra:
+                        //gps.buscarCaminhosDijkstra(idCidadeOrigem, idCidadeDestino);
                         break;
                 }
 
@@ -195,7 +197,7 @@ namespace apCaminhosMarte
                     Movimento mov = melhorCaminho.removerMovimento();
                     dgvMelhorCaminho.Rows[0].Cells[i].Value = mov.ToString();
                 }
-                lbTotalMenorPercurso.Text = melhorCaminho.CriterioTotal.ToString();
+                lbTotalMenorPercurso.Text = melhorCaminho.PesoTotal.ToString();
             }
             else // se nenhum caminho foi encontrado, o usuário é alertado e os dataGridViews limpados
             {
