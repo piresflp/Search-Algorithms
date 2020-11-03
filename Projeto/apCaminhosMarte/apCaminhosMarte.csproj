@@ -72,6 +72,7 @@
     <Compile Include="Classes\Estruturas de Dados\Pilha\PilhaLista.cs" />
     <Compile Include="Classes\Estruturas de Dados\Pilha\Exception\PilhaVaziaException.cs" />
     <Compile Include="Classes\Main\Program.cs" />
+    <Compile Include="Extensoes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Classes\Form\Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

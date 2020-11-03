@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace apCaminhosMarte.Classes.GPS
 {
-    class Caminho : IComparable<Caminho>
+    class Caminho : IComparable<Caminho>, ICloneable
     {
         PilhaLista<Movimento> movimentos;
         int pesoTotal;
@@ -42,7 +42,7 @@ namespace apCaminhosMarte.Classes.GPS
             return this.pesoTotal.CompareTo(outro.pesoTotal);
         }
 
-        public Caminho Clone() // deep copy
+        public Object Clone() // deep copy
         {
             Caminho clone = new Caminho(this.movimentos);
 

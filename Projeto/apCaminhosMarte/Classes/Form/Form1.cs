@@ -39,7 +39,6 @@ namespace apCaminhosMarte
                 lerCidadesSelecionadas(ref idCidadeOrigem, ref idCidadeDestino);
                 lerRadioButtonsSelecionados();
 
-                gps.CaminhosEncontrados = new List<Caminho>();
                 MetodoDeBusca metodoEscolhido = gps.Metodo;
                 switch (metodoEscolhido)
                 {
@@ -56,18 +55,8 @@ namespace apCaminhosMarte
                         break;
                 }
 
-                Caminho melhorCaminho = new Caminho();
-                List<Caminho> caminhosPossiveis = new List<Caminho>(gps.CaminhosEncontrados);
-                List<Caminho> caminhosPossiveisClone = new List<Caminho>(caminhosPossiveis.Count);
-
-                // caminhoClone da lista dos caminhos encontrados
-                caminhosPossiveis.ForEach((item) =>
-                {
-                    caminhosPossiveisClone.Add((Caminho)item.Clone());
-                });
-
-                melhorCaminho = buscarMelhorCaminho(caminhosPossiveis);
-                ExibirCaminhos(caminhosPossiveisClone, melhorCaminho);                
+                Caminho melhorCaminho = buscarMelhorCaminho(Extensoes.Clone(gps.CaminhosEncontrados));
+                ExibirCaminhos(Extensoes.Clone(gps.CaminhosEncontrados), melhorCaminho);                
             }
             catch (Exception ex)
             {

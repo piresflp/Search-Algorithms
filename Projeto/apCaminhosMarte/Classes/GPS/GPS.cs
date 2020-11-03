@@ -162,7 +162,7 @@ namespace apCaminhosMarte
                 Caminho saida = new Caminho();
                 if (achouCaminho)
                 {
-                    Caminho clone = pilha.Clone();
+                    Caminho clone = (Caminho) pilha.Clone();
                     while (!clone.Movimentos.EstaVazia)
                     {
                         Movimento movimento = clone.removerMovimento();
@@ -190,7 +190,7 @@ namespace apCaminhosMarte
 
             foreach (Caminho caminho in caminhos)
             {
-                Caminho caminhoClone = caminho.Clone(); // caminhoClone para não desempilhar o caminho que deve ser retornado.
+                Caminho caminhoClone = (Caminho) caminho.Clone(); // caminhoClone para não desempilhar o caminho que deve ser retornado.
                 int pesoTotal = 0;
                 while (!caminhoClone.Movimentos.EstaVazia)
                 {
@@ -216,7 +216,7 @@ namespace apCaminhosMarte
                 }
                 if (pesoTotal < menorPeso || menorPeso == 0) // se a distância total do caminho em questão for menor que todas as outras até o momento
                 {
-                    ret = caminho.Clone();
+                    ret = (Caminho) caminho.Clone();
                     menorPeso = pesoTotal;
                     ret.PesoTotal = menorPeso;
                 }
