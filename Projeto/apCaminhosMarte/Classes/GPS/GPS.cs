@@ -28,11 +28,11 @@ namespace apCaminhosMarte
     {
         Arvore<Cidade> arvore;
         List<Cidade> listaCidades;
-        List<Movimento> listaCaminhos;
+        List<Movimento> listaMovimentos;
         PilhaLista<Movimento> pilhaMovimento;
         List<Caminho> caminhosEncontrados;
         bool[] jaPassou;
-        int[,] matrizAdjacencia;
+        Movimento[,] matrizAdjacencia;
         bool semSaida;
         CriterioMelhorCaminho criterio;
         MetodoDeBusca metodo;
@@ -44,13 +44,13 @@ namespace apCaminhosMarte
         {
             arvore = new Arvore<Cidade>();
             listaCidades = new List<Cidade>();
-            listaCaminhos = new List<Movimento>();
+            listaMovimentos = new List<Movimento>();
             pilhaMovimento = new PilhaLista<Movimento>();
             caminhosEncontrados = new List<Caminho>();
 
             arvore = Leitor.lerCidades();
             listaCidades = arvore.getListaOrdenada();
-            listaCaminhos = Leitor.lerMovimentos();
+            listaMovimentos = Leitor.lerMovimentos();
             
             jaPassou = new bool[listaCidades.Count];
             matrizAdjacencia = montarMatrizAdjacencia();
@@ -62,29 +62,16 @@ namespace apCaminhosMarte
          * Após isso, são usados 2 "for" para percorrer os elementos da lista de caminho e verificar se existem caminhos equivalentes ao índices.
          * Se sim, a distância do caminho é armazenada na matriz de adjacência.
          */
-        public int[,] montarMatrizAdjacencia()
+        public Movimento[,] montarMatrizAdjacencia()
         {
             int qtdCidades = listaCidades.Count;
-            int[,] matriz = new int[qtdCidades, qtdCidades];
+            Movimento[,] matriz = new Movimento[qtdCidades, qtdCidades];
 
             for (int i = 0; i < qtdCidades; i++)
                 for (int j = 0; j < qtdCidades; j++)
-                    foreach (Movimento c in ListaCaminhos)
-                        if (c.IdCidadeOrigem == i && c.IdCidadeDestino == j)
-                            switch (this.criterio)
-                            {
-                                case CriterioMelhorCaminho.Distancia:
-                                    matriz[i, j] = c.Distancia;
-                                    break;
-
-                                case CriterioMelhorCaminho.Tempo:
-                                    matriz[i, j] = c.Tempo;
-                                    break;
-
-                                case CriterioMelhorCaminho.Custo:
-                                    matriz[i, j] = c.Custo;
-                                    break;
-                            }
+                    foreach (Movimento mov in ListaMovimentos)
+                        if (mov.IdCidadeOrigem == i && mov.IdCidadeDestino == j)
+                            matriz[i, j] = mov;
 
             return matriz;
         }
@@ -99,7 +86,7 @@ namespace apCaminhosMarte
         {
             for (int i = 0; i < listaCidades.Count; i++)
             {
-                if (matrizAdjacencia[idCidadeOrigem, i] != 0 && jaPassou[i] == false)
+                if (matrizAdjacencia[idCidadeOrigem, i] != null && jaPassou[i] == false)
                 {
                     pilhaMovimento.Empilhar(new Movimento(idCidadeOrigem, i));
                     jaPassou[i] = true;
@@ -133,35 +120,50 @@ namespace apCaminhosMarte
         public Caminho buscarMelhorCaminho(List<Caminho> caminhos)
         {
             Caminho ret = new Caminho();
-            int menorCriterio = 0; // critério -> distância, tempo ou custo (o que for escolhido pelo usuário)
+            int menorPeso = 0; // critério -> distância, tempo ou custo (o que for escolhido pelo usuário)
 
             foreach (Caminho caminho in caminhos)
             {
                 Caminho caminhoClone = caminho.Clone(); // caminhoClone para não desempilhar o caminho que deve ser retornado.
-                int criterioTotal = 0;
+                int pesoTotal = 0;
                 while (!caminhoClone.Movimentos.EstaVazia)
                 {
                     int idCidadeOrigem = caminhoClone.Movimentos.OTopo().IdCidadeOrigem;
                     int idCidadeDestino = caminhoClone.Movimentos.OTopo().IdCidadeDestino;
-                    criterioTotal += matrizAdjacencia[idCidadeOrigem, idCidadeDestino];
+
+                    switch (this.Criterio)
+                    {
+                        case CriterioMelhorCaminho.Distancia:
+                            pesoTotal += matrizAdjacencia[idCidadeOrigem, idCidadeDestino].Distancia;
+                            break;
+
+                        case CriterioMelhorCaminho.Tempo:
+                            pesoTotal += matrizAdjacencia[idCidadeOrigem, idCidadeDestino].Tempo;
+                            break;
+
+                        case CriterioMelhorCaminho.Custo:
+                            pesoTotal += matrizAdjacencia[idCidadeOrigem, idCidadeDestino].Custo;
+                            break;
+                    }
                     caminhoClone.removerMovimento();
+
                 }
-                if (criterioTotal < menorCriterio || menorCriterio == 0) // se a distância total do caminho em questão for menor que todas as outras até o momento
+                if (pesoTotal < menorPeso || menorPeso == 0) // se a distância total do caminho em questão for menor que todas as outras até o momento
                 {
                     ret = caminho.Clone();
-                    menorCriterio = criterioTotal;
-                    ret.CriterioTotal = menorCriterio;
+                    menorPeso = pesoTotal;
+                    ret.PesoTotal = menorPeso;
                 }
             }
             return ret;
         }
         public Arvore<Cidade> Arvore { get => arvore; set => arvore = value; }
         public List<Cidade> ListaCidades { get => listaCidades; set => listaCidades = value; }
-        public List<Movimento> ListaCaminhos { get => listaCaminhos; set => listaCaminhos = value; }
+        public List<Movimento> ListaMovimentos { get => listaMovimentos; set => listaMovimentos = value; }
         public PilhaLista<Movimento> PilhaMovimento { get => pilhaMovimento; set => pilhaMovimento = value; }
         public List<Caminho> CaminhosEncontrados { get => caminhosEncontrados; set => caminhosEncontrados = value; }
         public bool[] JaPassou { get => jaPassou; set => jaPassou = value; }
-        public int[,] MatrizAdjacencia { get => matrizAdjacencia; set => matrizAdjacencia = value; }
+        public Movimento[,] MatrizAdjacencia { get => matrizAdjacencia; set => matrizAdjacencia = value; }
         public bool SemSaida { get => semSaida; set => semSaida = value; }
         public CriterioMelhorCaminho Criterio { get => criterio; set => criterio = value; }
         public MetodoDeBusca Metodo { get => metodo; set => metodo = value; }

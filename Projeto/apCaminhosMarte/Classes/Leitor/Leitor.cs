@@ -41,7 +41,7 @@ namespace apCaminhosMarte
         public static List<Movimento> lerMovimentos()
         {
             StreamReader leitor = new StreamReader("CaminhosEntreCidadesMarte.txt");
-            List<Movimento> listaCaminho = new List<Movimento>();
+            List<Movimento> listaMovimentos = new List<Movimento>();
             while (!leitor.EndOfStream)
             {
                 String linha = leitor.ReadLine();
@@ -52,9 +52,9 @@ namespace apCaminhosMarte
                 int custo = int.Parse(linha.Substring(17, 3).Trim());
 
                 Movimento caminho = new Movimento(idCidadeOrigem, idCidadeDestino, distancia, tempo, custo);
-                listaCaminho.Add(caminho);
+                listaMovimentos.Add(caminho);
             }
-            return listaCaminho;
+            return listaMovimentos;
         }
     }
 }

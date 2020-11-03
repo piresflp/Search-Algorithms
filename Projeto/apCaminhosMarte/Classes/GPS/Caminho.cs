@@ -9,7 +9,7 @@ namespace apCaminhosMarte.Classes.GPS
     class Caminho : IComparable<Caminho>
     {
         PilhaLista<Movimento> movimentos;
-        int criterioTotal;
+        int pesoTotal;
 
         public Caminho() { }
 
@@ -36,19 +36,19 @@ namespace apCaminhosMarte.Classes.GPS
 
         public int CompareTo(Caminho outro)
         {
-            return this.criterioTotal.CompareTo(outro.criterioTotal);
+            return this.pesoTotal.CompareTo(outro.pesoTotal);
         }
 
         public Caminho Clone() // deep copy
         {
-            Caminho deepCopy = new Caminho(this.movimentos);
+            Caminho clone = new Caminho(this.movimentos);
 
-            return deepCopy;
+            return clone;
         }
 
         public int IdCidadeOrigem { get => this.Movimentos.Ultimo.Info.IdCidadeOrigem; }
         public int IdCidadeDestino { get => this.Movimentos.Primeiro.Info.IdCidadeDestino;}
-        public int CriterioTotal { get => this.criterioTotal; set => criterioTotal = value; }
+        public int PesoTotal { get => this.pesoTotal; set => pesoTotal = value; }
         public PilhaLista<Movimento> Movimentos { get => movimentos; set => movimentos = value; }
         public int Tamanho { get => Movimentos.Tamanho;}
     }
