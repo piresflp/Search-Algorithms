@@ -13,9 +13,10 @@ namespace apCaminhosMarte
 {
     class Arvore<Dado> where Dado : IComparable<Dado>, ICloneable
     {
-        protected NoArvore<Dado> raiz, atual, antecessor;
+        NoArvore<Dado> raiz, atual, antecessor;
 
         public Arvore() { }
+
         public NoArvore<Dado> InserirBalanceado(Dado item, NoArvore<Dado> noAtual)
         {
             if (noAtual == null)

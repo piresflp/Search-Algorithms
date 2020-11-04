@@ -12,8 +12,7 @@ namespace apCaminhosMarte
     class NoArvore<Dado> : IComparable<NoArvore<Dado>> where Dado : IComparable<Dado>
     {
         Dado info;
-        NoArvore<Dado> esq;
-        NoArvore<Dado> dir;
+        NoArvore<Dado> esq, dir;
         int altura;
         bool estaMarcadoParaMorrer;
 
@@ -33,12 +32,6 @@ namespace apCaminhosMarte
             this.Altura = altura;
         }
 
-        public Dado Info { get => info; set => info = value; }
-        public NoArvore<Dado> Esq { get => esq; set => esq = value; }
-        public NoArvore<Dado> Dir { get => dir; set => dir = value; }
-        public bool EstaMarcadoParaMorrer { get => estaMarcadoParaMorrer; set => estaMarcadoParaMorrer = value; }
-        public int Altura { get => altura; set => altura = value; }
-
         public int CompareTo(NoArvore<Dado> o)
         {
             return info.CompareTo(o.info);
@@ -48,5 +41,11 @@ namespace apCaminhosMarte
         {
             return this.info.Equals(o.info);
         }
+
+        public Dado Info { get => info; set => info = value; }
+        public NoArvore<Dado> Esq { get => esq; set => esq = value; }
+        public NoArvore<Dado> Dir { get => dir; set => dir = value; }
+        public bool EstaMarcadoParaMorrer { get => estaMarcadoParaMorrer; set => estaMarcadoParaMorrer = value; }
+        public int Altura { get => altura; set => altura = value; }
     }
 }

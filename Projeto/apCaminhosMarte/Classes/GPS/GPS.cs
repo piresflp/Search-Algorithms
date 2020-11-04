@@ -26,16 +26,16 @@ namespace apCaminhosMarte
 
     class GPS
     {
+        CriterioMelhorCaminho criterio;
+        MetodoDeBusca metodo;
         Arvore<Cidade> arvore;
         List<Cidade> listaCidades;
         List<Movimento> listaMovimentos;
         PilhaLista<Movimento> pilhaMovimento;
         List<Caminho> caminhosEncontrados;
-        bool[] jaPassou;
         Movimento[,] matrizAdjacencia;
         bool semSaida;
-        CriterioMelhorCaminho criterio;
-        MetodoDeBusca metodo;
+        bool[] jaPassou; 
 
         /**
          * Construtor, cada atributo é instanciado ou tem seus dados carregados.
@@ -46,14 +46,13 @@ namespace apCaminhosMarte
             listaCidades = new List<Cidade>();
             listaMovimentos = new List<Movimento>();
             pilhaMovimento = new PilhaLista<Movimento>();
-            caminhosEncontrados = new List<Caminho>();
 
-            arvore = Leitor.lerCidades();
+            arvore = Leitor.LerCidades();
             listaCidades = arvore.getListaOrdenada();
-            listaMovimentos = Leitor.lerMovimentos();
+            listaMovimentos = Leitor.LerMovimentos();
             
             jaPassou = new bool[listaCidades.Count];
-            matrizAdjacencia = montarMatrizAdjacencia();
+            matrizAdjacencia = MontarMatrizAdjacencia();
         }
 
         /**
@@ -62,31 +61,29 @@ namespace apCaminhosMarte
          * Após isso, são usados 2 "for" para percorrer os elementos da lista de caminho e verificar se existem caminhos equivalentes ao índices.
          * Se sim, a distância do caminho é armazenada na matriz de adjacência.
          */
-        public Movimento[,] montarMatrizAdjacencia()
+        public Movimento[,] MontarMatrizAdjacencia()
         {
-            int qtdCidades = listaCidades.Count;
-            Movimento[,] matriz = new Movimento[qtdCidades, qtdCidades];
+            Movimento[,] matrizAdjacencia = new Movimento[QtdCidades, QtdCidades];
 
-            for (int i = 0; i < qtdCidades; i++)
-                for (int j = 0; j < qtdCidades; j++)
+            for (int i = 0; i < QtdCidades; i++)
+                for (int j = 0; j < QtdCidades; j++)
                     foreach (Movimento mov in ListaMovimentos)
                         if (mov.IdCidadeOrigem == i && mov.IdCidadeDestino == j)
-                            matriz[i, j] = mov;
+                            matrizAdjacencia[i, j] = mov;
 
-            return matriz;
+            return matrizAdjacencia;
         }
 
         /**
          * Método recursivo que retorna todos os caminhos entre as cidades que possuem o Id equivalentes aos parâmetros.
-         * Cada passo do caminho em questão é armazenado na pilha de movimentos "pilhaMovimento".
-         * Por fim, se chegou ao destino, a pilha é armazenada na variável "caminhosEncontrados", representando um dos caminhos possíveis
+         * Cada passo do caminho em questão é armazenado na pilhaDeMovimentos de movimentos "pilhaMovimento".
+         * Por fim, se chegou ao destino, a pilhaDeMovimentos é armazenada na variável "caminhosEncontrados", representando um dos caminhos possíveis
          * O método acaba quando todos os caminhos possíveis são percorridos.
          */
-        public void buscarCaminhosRecursivo(int idCidadeOrigem, int idCidadeDestino)
+        public void BuscarCaminhosRecursivo(int idCidadeOrigem, int idCidadeDestino)
         {
-            for (int i = 0; i < listaCidades.Count; i++)
-            {
-                if (matrizAdjacencia[idCidadeOrigem, i] != null && jaPassou[i] == false)
+            for (int i = 0; i < QtdCidades; i++)            
+                if ((matrizAdjacencia[idCidadeOrigem, i] != null) && (jaPassou[i] == false))
                 {
                     pilhaMovimento.Empilhar(new Movimento(idCidadeOrigem, i));
                     jaPassou[i] = true;
@@ -100,9 +97,9 @@ namespace apCaminhosMarte
                         jaPassou[i] = false;
                     }
                     else
-                        buscarCaminhosRecursivo(i, idCidadeDestino); // backtracking
+                        BuscarCaminhosRecursivo(i, idCidadeDestino); // backtracking
                 }
-            }
+            
             if (!pilhaMovimento.EstaVazia)
             {
                 pilhaMovimento.Desempilhar();
@@ -110,23 +107,21 @@ namespace apCaminhosMarte
             }
         }
 
-        public void buscarCaminhosPilhas(int idCidadeOrigem, int idCidadeDestino)
+        public void BuscarCaminhosPilhas(int idCidadeOrigem, int idCidadeDestino)
         {
             int cidadeAtual = idCidadeOrigem;
             int saidaAtual = 0;
-            int qtdCidades = listaCidades.Count;
             bool achouCaminho = false;
 
-            for (int indice = 0; indice < qtdCidades; indice++)
+            for (int indice = 0; indice < QtdCidades; indice++)
                 jaPassou[indice] = false;
 
-            var pilha = new Caminho();
+            var pilhaDeMovimentos = new Caminho();
             while (!semSaida)
             {
-                semSaida = (cidadeAtual == idCidadeOrigem && saidaAtual == qtdCidades && pilha.Movimentos.EstaVazia);
-                if (!semSaida)
-                {
-                    while ((saidaAtual < qtdCidades) && !achouCaminho)
+                semSaida = (cidadeAtual == idCidadeOrigem && saidaAtual == QtdCidades && pilhaDeMovimentos.Movimentos.EstaVazia);
+                if (!semSaida)                
+                    while ((saidaAtual < QtdCidades) && !achouCaminho)
                     {
                         if (matrizAdjacencia[cidadeAtual, saidaAtual] == null)
                             saidaAtual++;
@@ -136,24 +131,24 @@ namespace apCaminhosMarte
 
                         else if (saidaAtual == idCidadeDestino)
                         {
-                            pilha.adicionarMovimento(new Movimento(cidadeAtual, saidaAtual));
+                            pilhaDeMovimentos.AdicionarMovimento(new Movimento(cidadeAtual, saidaAtual));
                             achouCaminho = true;
                         }
 
                         else
                         {
-                            pilha.adicionarMovimento(new Movimento(cidadeAtual, saidaAtual));
+                            pilhaDeMovimentos.AdicionarMovimento(new Movimento(cidadeAtual, saidaAtual));
                             jaPassou[cidadeAtual] = true;
                             cidadeAtual = saidaAtual;
                             saidaAtual = 0;
                         }
                     }
-                }
+                
 
                 if (!achouCaminho)
-                    if (!pilha.Movimentos.EstaVazia)
+                    if (!pilhaDeMovimentos.Movimentos.EstaVazia)
                     {
-                        Movimento movimento = pilha.removerMovimento();
+                        Movimento movimento = pilhaDeMovimentos.RemoverMovimento();
                         saidaAtual = movimento.IdCidadeDestino;
                         cidadeAtual = movimento.IdCidadeOrigem;
                         saidaAtual++;
@@ -162,15 +157,15 @@ namespace apCaminhosMarte
                 Caminho saida = new Caminho();
                 if (achouCaminho)
                 {
-                    Caminho clone = (Caminho) pilha.Clone();
+                    Caminho clone = (Caminho) pilhaDeMovimentos.Clone();
                     while (!clone.Movimentos.EstaVazia)
                     {
-                        Movimento movimento = clone.removerMovimento();
+                        Movimento movimento = clone.RemoverMovimento();
                         saida.Movimentos.Empilhar(movimento);
                     }
                     caminhosEncontrados.Add(saida);
                     achouCaminho = false;
-                    pilha.removerMovimento();
+                    pilhaDeMovimentos.RemoverMovimento();
                     saidaAtual++;
                 }
             }
@@ -181,9 +176,9 @@ namespace apCaminhosMarte
          * É passado como parâmetro a lista "caminhos", que representa todos os caminhos possíveis entre determinadas cidades.
          * Dessa forma, são declarados uma Pilha de retorno e uma matriz, que representará a matriz de adjacência.
          * Cada caminho da lista passada como parâmetro é percorrido e tem seu critério (distância, tempo ou custo) total calculado.
-         * Por fim, a pilha de retorno recebe o caminho com o menor critério total e é retornado.
+         * Por fim, a pilhaDeMovimentos de retorno recebe o caminho com o menor critério total e é retornado.
          */
-        public Caminho buscarMelhorCaminho(List<Caminho> caminhos)
+        public Caminho BuscarMelhorCaminho(List<Caminho> caminhos)
         {
             Caminho ret = new Caminho();
             int menorPeso = 0; // critério -> distância, tempo ou custo (o que for escolhido pelo usuário)
@@ -211,7 +206,7 @@ namespace apCaminhosMarte
                             pesoTotal += matrizAdjacencia[idCidadeOrigem, idCidadeDestino].Custo;
                             break;
                     }
-                    caminhoClone.removerMovimento();
+                    caminhoClone.RemoverMovimento();
 
                 }
                 if (pesoTotal < menorPeso || menorPeso == 0) // se a distância total do caminho em questão for menor que todas as outras até o momento
@@ -223,10 +218,12 @@ namespace apCaminhosMarte
             }
             return ret;
         }
+
         public Arvore<Cidade> Arvore { get => arvore; set => arvore = value; }
         public List<Cidade> ListaCidades { get => listaCidades; set => listaCidades = value; }
         public List<Movimento> ListaMovimentos { get => listaMovimentos; set => listaMovimentos = value; }
         public PilhaLista<Movimento> PilhaMovimento { get => pilhaMovimento; set => pilhaMovimento = value; }
+        public int QtdCidades { get => listaCidades.Count; }
         public List<Caminho> CaminhosEncontrados { get => caminhosEncontrados; set => caminhosEncontrados = value; }
         public bool[] JaPassou { get => jaPassou; set => jaPassou = value; }
         public Movimento[,] MatrizAdjacencia { get => matrizAdjacencia; set => matrizAdjacencia = value; }

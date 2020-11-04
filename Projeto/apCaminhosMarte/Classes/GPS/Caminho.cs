@@ -21,7 +21,7 @@ namespace apCaminhosMarte.Classes.GPS
             this.movimentos = movimentos.Clone();
         }
 
-        public void adicionarMovimento(Movimento mov)
+        public void AdicionarMovimento(Movimento mov)
         {
             if (mov == null)
                 throw new Exception("Movimento nulo!");
@@ -29,7 +29,7 @@ namespace apCaminhosMarte.Classes.GPS
             this.movimentos.Empilhar(mov);            
         }
 
-        public Movimento removerMovimento()
+        public Movimento RemoverMovimento()
         {
             if (this.movimentos.EstaVazia)
                 throw new Exception("Pilha vazia!");
@@ -49,9 +49,9 @@ namespace apCaminhosMarte.Classes.GPS
             return clone;
         }
 
-        public int IdCidadeOrigem { get => this.Movimentos.Ultimo.Info.IdCidadeOrigem; }
-        public int IdCidadeDestino { get => this.Movimentos.Primeiro.Info.IdCidadeDestino;}
-        public int PesoTotal { get => this.pesoTotal; set => pesoTotal = value; }
+        public int IdCidadeOrigem { get => Movimentos.Ultimo.Info.IdCidadeOrigem; }
+        public int IdCidadeDestino { get => Movimentos.Primeiro.Info.IdCidadeDestino;}
+        public int PesoTotal { get => pesoTotal; set => pesoTotal = value; }
         public PilhaLista<Movimento> Movimentos { get => movimentos; set => movimentos = value; }
         public int Tamanho { get => Movimentos.Tamanho;}
     }

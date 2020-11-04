@@ -36,18 +36,19 @@ namespace apCaminhosMarte
             try
             {
                 int idCidadeOrigem = -1, idCidadeDestino = -1;
-                lerCidadesSelecionadas(ref idCidadeOrigem, ref idCidadeDestino);
-                lerRadioButtonsSelecionados();
+                LerCidadesSelecionadas(ref idCidadeOrigem, ref idCidadeDestino);
+                LerRadioButtonsSelecionados();
 
+                gps.CaminhosEncontrados = new List<Caminho>();
                 MetodoDeBusca metodoEscolhido = gps.Metodo;
                 switch (metodoEscolhido)
                 {
                     case MetodoDeBusca.Pilhas:
-                        gps.buscarCaminhosPilhas(idCidadeOrigem, idCidadeDestino);
+                        gps.BuscarCaminhosPilhas(idCidadeOrigem, idCidadeDestino);
                         break;
 
                     case MetodoDeBusca.Recursao:
-                        gps.buscarCaminhosRecursivo(idCidadeOrigem, idCidadeDestino);
+                        gps.BuscarCaminhosRecursivo(idCidadeOrigem, idCidadeDestino);
                         break;
 
                     case MetodoDeBusca.Dijkstra:
@@ -55,7 +56,7 @@ namespace apCaminhosMarte
                         break;
                 }
 
-                Caminho melhorCaminho = buscarMelhorCaminho(Extensoes.Clone(gps.CaminhosEncontrados));
+                Caminho melhorCaminho = BuscarMelhorCaminho(Extensoes.Clone(gps.CaminhosEncontrados));
                 ExibirCaminhos(Extensoes.Clone(gps.CaminhosEncontrados), melhorCaminho);                
             }
             catch (Exception ex)
@@ -64,29 +65,30 @@ namespace apCaminhosMarte
             }        
         }
         
-        private void lerCidadesSelecionadas(ref int idCidadeOrigem, ref int idCidadeDestino)
+        private void LerCidadesSelecionadas(ref int idCidadeOrigem, ref int idCidadeDestino)
         {
             if (lsbOrigem.SelectedIndex == -1)
                 throw new Exception("Selecione a cidade de origem!");
+
             if (lsbDestino.SelectedIndex == -1)
                 throw new Exception("Selecione a cidade de destino!");
 
-            String[] cidades = new String[23] { "Acheron", "Arena", "Arrakeen", "Bakhuysen",
+            String[] cidadesMarte = new String[23] { "Acheron", "Arena", "Arrakeen", "Bakhuysen",
                                                 "Bradbury", "Burroughs", "Cairo", "Dumont", "Echus Overlook",
                                                 "Esperança", "Gondor", "Lakefront", "Lowell", "Moria", "Nicosia",
                                                 "Odessa", "Perseverança", "Rowan", "Senzeni Na", "Sheffield", "Temperança",
                                                 "Tharsis", "Underhill"};
 
-            String cidadeOrigem = cidades[lsbOrigem.SelectedIndex];
-            String cidadeDestino = cidades[lsbDestino.SelectedIndex];
+            String cidadeOrigem = cidadesMarte[lsbOrigem.SelectedIndex];
+            String cidadeDestino = cidadesMarte[lsbDestino.SelectedIndex];
 
-            foreach (Cidade c in gps.ListaCidades) // percorre o vetor de cidades para encontrar o Id das cidades selecionadas
+            foreach (Cidade cidade in gps.ListaCidades) // percorre o vetor de cidades para encontrar o Id das cidades selecionadas
             {
-                if (c.Nome.Equals(cidadeOrigem))
-                    idCidadeOrigem = c.Id;
+                if (cidade.Nome.Equals(cidadeOrigem))
+                    idCidadeOrigem = cidade.Id;
 
-                else if (c.Nome == cidadeDestino)
-                    idCidadeDestino = c.Id;
+                else if (cidade.Nome == cidadeDestino)
+                    idCidadeDestino = cidade.Id;
 
                 if (idCidadeOrigem != -1 && idCidadeDestino != -1) // se o Id de ambas cidades já foram encontrados
                     break; // sai do foreach
@@ -95,7 +97,7 @@ namespace apCaminhosMarte
                 throw new Exception("Erro ao descobrir Id de alguma das cidades selecionadas.");
         }
 
-        private void lerRadioButtonsSelecionados()
+        private void LerRadioButtonsSelecionados()
         {
             String criterioMelhorCaminho = null, metodoDeBusca = null;
 
@@ -149,14 +151,14 @@ namespace apCaminhosMarte
          * Percorre a lista de caminhos encontrados e de melhor caminho, exibindo cada passo em uma coluna do dataGridView.
          * Caso nenhuma coluna seja exibida, nenhum caminho foi encontrado e o usuário é alertado.
          */
-        private void ExibirCaminhos(List<Caminho> caminhos, Caminho melhorCaminho)
+        private void ExibirCaminhos(List<Caminho> listaCaminhos, Caminho melhorCaminho)
         {                      
             dgvCaminhos.ColumnCount = 0;
-            dgvCaminhos.RowCount = caminhos.Count;
+            dgvCaminhos.RowCount = listaCaminhos.Count;
             int caminhosExibidos = 0;
 
             int qtdMovimentos;
-            foreach (Caminho caminho in caminhos)
+            foreach (Caminho caminho in listaCaminhos)
             {
                 qtdMovimentos = caminho.Tamanho;
                 if (qtdMovimentos > dgvCaminhos.ColumnCount)
@@ -166,11 +168,10 @@ namespace apCaminhosMarte
                         dgvCaminhos.Columns[i].HeaderText = "Cidade";
                 }
 
-
                 // exibe cada movimento do caminho em questão
                 for (int i = qtdMovimentos - 1; !caminho.Movimentos.EstaVazia; i--) 
                 {
-                    Movimento mov = (Movimento)caminho.removerMovimento();
+                    Movimento mov = (Movimento)caminho.RemoverMovimento();
                     dgvCaminhos.Rows[caminhosExibidos].Cells[i].Value = mov.ToString();
                 }
                 caminhosExibidos++;
@@ -183,14 +184,14 @@ namespace apCaminhosMarte
                 dgvMelhorCaminho.RowCount = 1;
                 for (int i = qtdMovimentos - 1; !melhorCaminho.Movimentos.EstaVazia; i--) // exibe cada movimento do melhor caminho
                 {
-                    Movimento mov = melhorCaminho.removerMovimento();
+                    Movimento mov = melhorCaminho.RemoverMovimento();
                     dgvMelhorCaminho.Rows[0].Cells[i].Value = mov.ToString();
                 }
                 lbTotalMenorPercurso.Text = melhorCaminho.PesoTotal.ToString();
             }
             else // se nenhum caminho foi encontrado, o usuário é alertado e os dataGridViews limpados
             {
-                limparPictureBox();
+                LimparPictureBox();
                 dgvMelhorCaminho.RowCount = 0;
                 MessageBox.Show("Não foi encontrado nenhum caminho.");
             }
@@ -199,9 +200,9 @@ namespace apCaminhosMarte
         /**
          * Chama o método que busca o melhor caminho, da classe GPS.
          */
-        private Caminho buscarMelhorCaminho(List<Caminho> caminhos)
+        private Caminho BuscarMelhorCaminho(List<Caminho> caminhos)
         {
-            return gps.buscarMelhorCaminho(caminhos);
+            return gps.BuscarMelhorCaminho(caminhos);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -231,45 +232,43 @@ namespace apCaminhosMarte
 
         private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            limparPictureBox();
+            LimparPictureBox();
             Application.DoEvents();
-            desenharCaminho(this.gps.CaminhosEncontrados[dgvCaminhos.CurrentCell.RowIndex]);
+            DesenharCaminho(this.gps.CaminhosEncontrados[dgvCaminhos.CurrentCell.RowIndex]);
         }
 
         /**
          * Método responsável por desenhar as retas ligando cada movimento do caminho passado como parâmetro.
          */
-        private void desenharCaminho(Caminho caminho)
+        private void DesenharCaminho(Caminho caminhoParaDesenhar)
         {
-            if (caminho != null)
+            if (caminhoParaDesenhar != null)
             {
                 Graphics g = pbMapa.CreateGraphics();
                 Pen pen = new Pen(Color.Blue, 3);
 
                 int xProporcional = 4096 / pbMapa.Width;
                 int yProporcional = 2048 / pbMapa.Height;
-                Caminho caminhoClone = (Caminho) caminho.Clone();
-                int cordXOrigem = 0;
-                int cordYOrigem = 0;
-                int cordXDestino = 0;
-                int cordYDestino = 0;
+                Caminho caminhoClone = (Caminho) caminhoParaDesenhar.Clone();
+
+                int coordenadaXOrigem = 0, coordenadaXDestino = 0, coordenadaYOrigem = 0, coordenadaYDestino = 0;
                 while (!caminhoClone.Movimentos.EstaVazia)
                 {
                     foreach (Cidade c in gps.ListaCidades)
                     {
                         if (caminhoClone.Movimentos.Primeiro.Info.IdCidadeOrigem == c.Id)
                         {
-                            cordXOrigem = c.CoordenadaX;
-                            cordYOrigem = c.CoordenadaY;
+                            coordenadaXOrigem = c.CoordenadaX;
+                            coordenadaYOrigem = c.CoordenadaY;
                         }
                         if (caminhoClone.Movimentos.Primeiro.Info.IdCidadeDestino == c.Id)
                         {
-                            cordXDestino = c.CoordenadaX;
-                            cordYDestino = c.CoordenadaY;
+                            coordenadaXDestino = c.CoordenadaX;
+                            coordenadaYDestino = c.CoordenadaY;
                         }
                     }
-                    g.DrawLine(pen, new Point(cordXOrigem / xProporcional, cordYOrigem / yProporcional), new Point(cordXDestino / xProporcional, cordYDestino / yProporcional));
-                    caminhoClone.removerMovimento();
+                    g.DrawLine(pen, new Point(coordenadaXOrigem / xProporcional, coordenadaYOrigem / yProporcional), new Point(coordenadaXDestino / xProporcional, coordenadaYDestino / yProporcional));
+                    caminhoClone.RemoverMovimento();
                 }
             }           
         }
@@ -277,7 +276,7 @@ namespace apCaminhosMarte
         /**
          * Limpa a pictureBox do mapa de marte para exibição de novos caminhos, evitando sobreposição.
          */
-        private void limparPictureBox()
+        private void LimparPictureBox()
         {
             Graphics g = pbMapa.CreateGraphics();
             g.Clear(Color.White);

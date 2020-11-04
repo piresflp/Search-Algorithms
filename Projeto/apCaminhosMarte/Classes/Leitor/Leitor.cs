@@ -17,19 +17,20 @@ namespace apCaminhosMarte
         /**
          * Método responsável por ler o arquivo "CidadesMarte.txt" e armazenar seus dados numa Arvore de cidades, que será retornada.
          */
-        public static Arvore<Cidade> lerCidades()
+        public static Arvore<Cidade> LerCidades()
         {
-            StreamReader leitor = new StreamReader("CidadesMarte.txt");
+            StreamReader leitorDeArquivos = new StreamReader("CidadesMarte.txt");
             Arvore<Cidade> arvore = new Arvore<Cidade>();
 
-            while (!leitor.EndOfStream)
+            while (!leitorDeArquivos.EndOfStream)
             {
-                String linha = leitor.ReadLine();
-                int idCidade = int.Parse(linha.Substring(0, 3).Trim());
-                String nome = linha.Substring(3, 16).Trim();
-                int coordenadaX = int.Parse(linha.Substring(19, 5).Trim());
-                int coordenadaY = int.Parse(linha.Substring(24, 4).Trim());
-                Cidade novaCidade = new Cidade(idCidade, nome, coordenadaX, coordenadaY);
+                String linhaLinha = leitorDeArquivos.ReadLine();
+                int idCidade = int.Parse(linhaLinha.Substring(0, 3).Trim());
+                String nomeCidade = linhaLinha.Substring(3, 16).Trim();
+                int coordenadaX = int.Parse(linhaLinha.Substring(19, 5).Trim());
+                int coordenadaY = int.Parse(linhaLinha.Substring(24, 4).Trim());
+
+                Cidade novaCidade = new Cidade(idCidade, nomeCidade, coordenadaX, coordenadaY);
                 arvore.Raiz = arvore.InserirBalanceado(novaCidade, arvore.Raiz);
             }
             return arvore;
@@ -38,21 +39,21 @@ namespace apCaminhosMarte
         /**
          * Método que le o arquivo "CaminhosEntreCidadesMarte.txt" e retorna os seus dados numa lista genérica de caminhos.
          */ 
-        public static List<Movimento> lerMovimentos()
+        public static List<Movimento> LerMovimentos()
         {
-            StreamReader leitor = new StreamReader("CaminhosEntreCidadesMarte.txt");
+            StreamReader leitorDeArquivos = new StreamReader("CaminhosEntreCidadesMarte.txt");
             List<Movimento> listaMovimentos = new List<Movimento>();
-            while (!leitor.EndOfStream)
+            while (!leitorDeArquivos.EndOfStream)
             {
-                String linha = leitor.ReadLine();
-                int idCidadeOrigem = int.Parse(linha.Substring(0, 4).Trim());
-                int idCidadeDestino = int.Parse(linha.Substring(4, 3).Trim());
-                int distancia = int.Parse(linha.Substring(7, 6).Trim());
-                int tempo = int.Parse(linha.Substring(13, 4).Trim());
-                int custo = int.Parse(linha.Substring(17, 3).Trim());
+                String linhaLida = leitorDeArquivos.ReadLine();
+                int idCidadeOrigem = int.Parse(linhaLida.Substring(0, 4).Trim());
+                int idCidadeDestino = int.Parse(linhaLida.Substring(4, 3).Trim());
+                int distancia = int.Parse(linhaLida.Substring(7, 6).Trim());
+                int tempo = int.Parse(linhaLida.Substring(13, 4).Trim());
+                int custo = int.Parse(linhaLida.Substring(17, 3).Trim());
 
-                Movimento caminho = new Movimento(idCidadeOrigem, idCidadeDestino, distancia, tempo, custo);
-                listaMovimentos.Add(caminho);
+                Movimento novoMovimento = new Movimento(idCidadeOrigem, idCidadeDestino, distancia, tempo, custo);
+                listaMovimentos.Add(novoMovimento);
             }
             return listaMovimentos;
         }
