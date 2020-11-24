@@ -107,65 +107,72 @@ namespace apCaminhosMarte
             }
         }
 
-        public void BuscarCaminhosPilhas(int idCidadeOrigem, int idCidadeDestino)
+        public void BuscarCaminhosPilhas(int idOrigem, int idDestino)
         {
-            int cidadeAtual = idCidadeOrigem;
-            int saidaAtual = 0;
-            bool achouCaminho = false;
 
-            for (int indice = 0; indice < QtdCidades; indice++)
-                jaPassou[indice] = false;
+            int cidadeAtual, saidaAtual;
+            bool achouCaminho = false,
+            naoTemSaida = false;
+            int qtsCidades = ListaCidades.Count;
+            bool[] passou = new bool[qtsCidades];
+            Movimento[,] grafo = MontarMatrizAdjacencia();
 
-            var pilhaDeMovimentos = new Caminho();
-            while (!semSaida)
+            for (int indice = 0; indice < qtsCidades; indice++)
+                passou[indice] = false;
+
+            cidadeAtual = idOrigem;
+            saidaAtual = 0;
+            var pilha = new PilhaLista<Movimento>();
+            while (!naoTemSaida)
             {
-                semSaida = (cidadeAtual == idCidadeOrigem && saidaAtual == QtdCidades && pilhaDeMovimentos.Movimentos.EstaVazia);
-                if (!semSaida)                
-                    while ((saidaAtual < QtdCidades) && !achouCaminho)
+                naoTemSaida = (cidadeAtual == idOrigem && saidaAtual == 23 && pilha.EstaVazia);
+                if (!naoTemSaida)
+                {
+                    while ((saidaAtual < qtsCidades) && !achouCaminho)
                     {
-                        if (matrizAdjacencia[cidadeAtual, saidaAtual] == null)
-                            saidaAtual++;
 
-                        else if (jaPassou[saidaAtual])
+                        if (grafo[cidadeAtual, saidaAtual] == null)
                             saidaAtual++;
+                        else
 
-                        else if (saidaAtual == idCidadeDestino)
+                        if (passou[saidaAtual])
+                            saidaAtual++;
+                        else
+
+                        if (saidaAtual == idDestino)
                         {
-                            pilhaDeMovimentos.AdicionarMovimento(new Movimento(cidadeAtual, saidaAtual));
+                            Movimento movimento = new Movimento(cidadeAtual, saidaAtual);
+                            pilha.Empilhar(movimento);
                             achouCaminho = true;
                         }
-
                         else
                         {
-                            pilhaDeMovimentos.AdicionarMovimento(new Movimento(cidadeAtual, saidaAtual));
-                            jaPassou[cidadeAtual] = true;
+                            Movimento movimento = new Movimento(cidadeAtual, saidaAtual);
+                            pilha.Empilhar(movimento);
+                            passou[cidadeAtual] = true;
                             cidadeAtual = saidaAtual;
                             saidaAtual = 0;
                         }
                     }
-                
-
+                }
                 if (!achouCaminho)
-                    if (!pilhaDeMovimentos.Movimentos.EstaVazia)
+                    if (!pilha.EstaVazia)
                     {
-                        Movimento movimento = pilhaDeMovimentos.RemoverMovimento();
+                        passou[cidadeAtual] = false;
+                        var movimento = pilha.Desempilhar();
                         saidaAtual = movimento.IdCidadeDestino;
                         cidadeAtual = movimento.IdCidadeOrigem;
                         saidaAtual++;
                     }
-
-                Caminho saida = new Caminho();
                 if (achouCaminho)
                 {
-                    Caminho clone = (Caminho) pilhaDeMovimentos.Clone();
-                    while (!clone.Movimentos.EstaVazia)
-                    {
-                        Movimento movimento = clone.RemoverMovimento();
-                        saida.Movimentos.Empilhar(movimento);
-                    }
-                    caminhosEncontrados.Add(saida);
+                    Caminho novoCaminho = new Caminho();
+                    novoCaminho.Movimentos = pilha.Clone();
+                    caminhosEncontrados.Add(novoCaminho);
                     achouCaminho = false;
-                    pilhaDeMovimentos.RemoverMovimento();
+                    pilha.Desempilhar();
+                    for (int i = 0; i < qtsCidades; i++)
+                        passou[i] = false;
                     saidaAtual++;
                 }
             }

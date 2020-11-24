@@ -247,8 +247,8 @@ namespace apCaminhosMarte
                 Graphics g = pbMapa.CreateGraphics();
                 Pen pen = new Pen(Color.Blue, 3);
 
-                int xProporcional = 4096 / pbMapa.Width;
-                int yProporcional = 2048 / pbMapa.Height;
+                int xProporcional = 4096 / pbMapa.Width +1;
+                int yProporcional = 2048 / pbMapa.Height +1;
                 Caminho caminhoClone = (Caminho) caminhoParaDesenhar.Clone();
 
                 int coordenadaXOrigem = 0, coordenadaXDestino = 0, coordenadaYOrigem = 0, coordenadaYDestino = 0;

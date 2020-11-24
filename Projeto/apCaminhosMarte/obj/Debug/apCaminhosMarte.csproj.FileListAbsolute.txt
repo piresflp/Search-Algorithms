@@ -88,7 +88,6 @@ C:\Users\Felipe\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\ap
 C:\Users\Felipe\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\apCaminhosMarte.exe
 C:\Users\Felipe\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\apCaminhosMarte.pdb
 C:\Users\Rafael\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\apCaminhosMarte.csprojAssemblyReference.cache
-C:\Users\Rafael\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\apCaminhosMarte.Form1.resources
 C:\Users\Rafael\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\apCaminhosMarte.Properties.Resources.resources
 C:\Users\Rafael\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\apCaminhosMarte.csproj.GenerateResource.cache
 C:\Users\Rafael\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\apCaminhosMarte.csproj.CoreCompileInputs.cache
@@ -104,3 +103,4 @@ C:\Users\Rafael\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\bin\Debug\AW
 C:\Users\Rafael\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\bin\Debug\C5.xml
 C:\Users\Rafael\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\apCaminhosMarte.csproj.CopyComplete
 C:\Users\Felipe\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\apCaminhosMarte.frmBuscaCaminhos.resources
+C:\Users\Rafael\Desktop\Rotas-entre-cidades\Projeto\apCaminhosMarte\obj\Debug\apCaminhosMarte.frmBuscaCaminhos.resources
