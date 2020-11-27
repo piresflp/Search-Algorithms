@@ -55,6 +55,8 @@
   <ItemGroup>
     <Compile Include="Classes\Estruturas de Dados\Arvore\Arvore.cs" />
     <Compile Include="Classes\GPS\Caminho.cs" />
+    <Compile Include="Classes\GPS\Dijkstra\Dijkstra.cs" />
+    <Compile Include="Classes\GPS\DistOriginal.cs" />
     <Compile Include="Classes\GPS\Movimento.cs" />
     <Compile Include="Classes\GPS\Cidade.cs" />
     <Compile Include="Classes\Form\Form1.cs">
@@ -65,6 +67,8 @@
     </Compile>
     <Compile Include="Classes\GPS\GPS.cs" />
     <Compile Include="Classes\Estruturas de Dados\Pilha\IStack.cs" />
+    <Compile Include="Classes\GPS\Pilhas\Pilhas.cs" />
+    <Compile Include="Classes\GPS\Recursao\Recursao.cs" />
     <Compile Include="Classes\Leitor\Leitor.cs" />
     <Compile Include="Classes\Estruturas de Dados\Lista\ListaSImples.cs" />
     <Compile Include="Classes\Estruturas de Dados\Arvore\NoArvore.cs" />

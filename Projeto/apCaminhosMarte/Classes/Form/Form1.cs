@@ -52,7 +52,7 @@ namespace apCaminhosMarte
                         break;
 
                     case MetodoDeBusca.Dijkstra:
-                        //gps.buscarCaminhosDijkstra(idCidadeOrigem, idCidadeDestino);
+                        gps.BuscarCaminhosDijkstra(idCidadeOrigem, idCidadeDestino);
                         break;
                 }
 

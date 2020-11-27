@@ -72,7 +72,8 @@ namespace apCaminhosMarte
                             matrizAdjacencia[i, j] = mov;
 
             return matrizAdjacencia;
-        }
+        }              
+
 
         /**
          * Método recursivo que retorna todos os caminhos entre as cidades que possuem o Id equivalentes aos parâmetros.
@@ -83,7 +84,7 @@ namespace apCaminhosMarte
         public void BuscarCaminhosRecursivo(int idCidadeOrigem, int idCidadeDestino)
         {
             for (int i = 0; i < QtdCidades; i++)            
-                if ((matrizAdjacencia[idCidadeOrigem, i] != null) && (jaPassou[i] == false))
+                if ((matrizAdjacencia[idCidadeOrigem, i] != null) && (!jaPassou[i]))
                 {
                     pilhaMovimento.Empilhar(new Movimento(idCidadeOrigem, i));
                     jaPassou[i] = true;
@@ -133,13 +134,11 @@ namespace apCaminhosMarte
 
                         if (grafo[cidadeAtual, saidaAtual] == null)
                             saidaAtual++;
-                        else
 
-                        if (passou[saidaAtual])
+                        else if (passou[saidaAtual])
                             saidaAtual++;
-                        else
 
-                        if (saidaAtual == idDestino)
+                        else if (saidaAtual == idDestino)
                         {
                             Movimento movimento = new Movimento(cidadeAtual, saidaAtual);
                             pilha.Empilhar(movimento);
