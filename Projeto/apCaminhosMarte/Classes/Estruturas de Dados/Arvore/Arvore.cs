@@ -111,6 +111,25 @@ namespace apCaminhosMarte
             return false; // Se local == null, a chave não existe
         }
 
+        public Dado BuscarDado(Dado dadoBuscado)
+        {
+            return acharDado(dadoBuscado, this.raiz);
+        }
+
+        private Dado acharDado(Dado dadoBuscado, NoArvore<Dado> atual)
+        {
+            if (atual == null)
+                throw new Exception("Dado inexistente!");
+
+            int comp = dadoBuscado.CompareTo(atual.Info);
+            if (comp == 0)
+                return atual.Info;
+            if (comp < 0)
+                return acharDado(dadoBuscado, atual.Esq);
+            else
+                return acharDado(dadoBuscado, atual.Dir);
+        }
+
         public void DesenharArvore(bool primeiraVez, NoArvore<Cidade> raiz, int x, int y, double angulo, double incremento, double comprimento, Graphics g)
         {
             int xf, yf;

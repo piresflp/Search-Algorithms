@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using apCaminhosMarte.Classes.GPS.Dijkstra;
+using apCaminhosMarte.Classes.GPS.Recursao;
+using apCaminhosMarte.Classes.GPS.Pilhas;
 
 namespace apCaminhosMarte
 {
@@ -30,12 +33,9 @@ namespace apCaminhosMarte
         MetodoDeBusca metodo;
         Arvore<Cidade> arvore;
         List<Cidade> listaCidades;
-        List<Movimento> listaMovimentos;
-        PilhaLista<Movimento> pilhaMovimento;
+        List<Movimento> listaMovimentos;        
         List<Caminho> caminhosEncontrados;
-        Movimento[,] matrizAdjacencia;
-        bool semSaida;
-        bool[] jaPassou; 
+        Movimento[,] matrizAdjacencia;    
 
         /**
          * Construtor, cada atributo é instanciado ou tem seus dados carregados.
@@ -44,15 +44,13 @@ namespace apCaminhosMarte
         {
             arvore = new Arvore<Cidade>();
             listaCidades = new List<Cidade>();
-            listaMovimentos = new List<Movimento>();
-            pilhaMovimento = new PilhaLista<Movimento>();
+            listaMovimentos = new List<Movimento>();            
 
             arvore = Leitor.LerCidades();
             listaCidades = arvore.getListaOrdenada();
             listaMovimentos = Leitor.LerMovimentos();
             
-            jaPassou = new bool[listaCidades.Count];
-            matrizAdjacencia = MontarMatrizAdjacencia();
+            matrizAdjacencia = MontarMatrizAdjacencia();            
         }
 
         /**
@@ -72,109 +70,26 @@ namespace apCaminhosMarte
                             matrizAdjacencia[i, j] = mov;
 
             return matrizAdjacencia;
-        }              
-
-
-        /**
-         * Método recursivo que retorna todos os caminhos entre as cidades que possuem o Id equivalentes aos parâmetros.
-         * Cada passo do caminho em questão é armazenado na pilhaDeMovimentos de movimentos "pilhaMovimento".
-         * Por fim, se chegou ao destino, a pilhaDeMovimentos é armazenada na variável "caminhosEncontrados", representando um dos caminhos possíveis
-         * O método acaba quando todos os caminhos possíveis são percorridos.
-         */
-        public void BuscarCaminhosRecursivo(int idCidadeOrigem, int idCidadeDestino)
+        } 
+        
+        public void BuscarCaminhosDijkstra(int idCidadeOrigem, int idCidadeDestino)
         {
-            for (int i = 0; i < QtdCidades; i++)            
-                if ((matrizAdjacencia[idCidadeOrigem, i] != null) && (!jaPassou[i]))
-                {
-                    pilhaMovimento.Empilhar(new Movimento(idCidadeOrigem, i));
-                    jaPassou[i] = true;
-
-                    if (i == idCidadeDestino) // se chegou ao destino
-                    {
-                        Caminho novoCaminho = new Caminho();
-                        novoCaminho.Movimentos = pilhaMovimento.Clone();
-                        caminhosEncontrados.Add(novoCaminho);
-                        pilhaMovimento.Desempilhar(); // busca novos caminhos
-                        jaPassou[i] = false;
-                    }
-                    else
-                        BuscarCaminhosRecursivo(i, idCidadeDestino); // backtracking
-                }
-            
-            if (!pilhaMovimento.EstaVazia)
-            {
-                pilhaMovimento.Desempilhar();
-                jaPassou[idCidadeOrigem] = false;
-            }
+            Dijkstra algoritmoDijkstra = new Dijkstra();
+            caminhosEncontrados = algoritmoDijkstra.BuscarCaminhos(idCidadeOrigem, idCidadeDestino);
         }
 
-        public void BuscarCaminhosPilhas(int idOrigem, int idDestino)
+
+        
+        public void BuscarCaminhosRecursivo(int idCidadeOrigem, int idCidadeDestino)
         {
+            Recursao algoritmoRecursivo = new Recursao();
+            caminhosEncontrados = algoritmoRecursivo.BuscarCaminhos(idCidadeOrigem, idCidadeDestino);
+        }
 
-            int cidadeAtual, saidaAtual;
-            bool achouCaminho = false,
-            naoTemSaida = false;
-            int qtsCidades = ListaCidades.Count;
-            bool[] passou = new bool[qtsCidades];
-            Movimento[,] grafo = MontarMatrizAdjacencia();
-
-            for (int indice = 0; indice < qtsCidades; indice++)
-                passou[indice] = false;
-
-            cidadeAtual = idOrigem;
-            saidaAtual = 0;
-            var pilha = new PilhaLista<Movimento>();
-            while (!naoTemSaida)
-            {
-                naoTemSaida = (cidadeAtual == idOrigem && saidaAtual == 23 && pilha.EstaVazia);
-                if (!naoTemSaida)
-                {
-                    while ((saidaAtual < qtsCidades) && !achouCaminho)
-                    {
-
-                        if (grafo[cidadeAtual, saidaAtual] == null)
-                            saidaAtual++;
-
-                        else if (passou[saidaAtual])
-                            saidaAtual++;
-
-                        else if (saidaAtual == idDestino)
-                        {
-                            Movimento movimento = new Movimento(cidadeAtual, saidaAtual);
-                            pilha.Empilhar(movimento);
-                            achouCaminho = true;
-                        }
-                        else
-                        {
-                            Movimento movimento = new Movimento(cidadeAtual, saidaAtual);
-                            pilha.Empilhar(movimento);
-                            passou[cidadeAtual] = true;
-                            cidadeAtual = saidaAtual;
-                            saidaAtual = 0;
-                        }
-                    }
-                }
-                if (!achouCaminho)
-                    if (!pilha.EstaVazia)
-                    {
-                        passou[cidadeAtual] = false;
-                        var movimento = pilha.Desempilhar();
-                        saidaAtual = movimento.IdCidadeDestino;
-                        cidadeAtual = movimento.IdCidadeOrigem;
-                        saidaAtual++;
-                    }
-                if (achouCaminho)
-                {
-                    Caminho novoCaminho = new Caminho();
-                    novoCaminho.Movimentos = pilha.Clone();
-                    caminhosEncontrados.Add(novoCaminho);
-                    achouCaminho = false;
-                    pilha.Desempilhar();
-                    for (int i = 0; i < qtsCidades; i++)
-                        passou[i] = false;
-                    saidaAtual++;
-                }
-            }
+        public void BuscarCaminhosPilhas(int idCidadeOrigem, int idCidadeDestino)
+        {
+            Pilhas algoritmoPilhas = new Pilhas();
+            caminhosEncontrados = algoritmoPilhas.BuscarCaminhos(idCidadeOrigem, idCidadeDestino);            
         }
 
         /**
@@ -227,13 +142,10 @@ namespace apCaminhosMarte
 
         public Arvore<Cidade> Arvore { get => arvore; set => arvore = value; }
         public List<Cidade> ListaCidades { get => listaCidades; set => listaCidades = value; }
-        public List<Movimento> ListaMovimentos { get => listaMovimentos; set => listaMovimentos = value; }
-        public PilhaLista<Movimento> PilhaMovimento { get => pilhaMovimento; set => pilhaMovimento = value; }
+        public List<Movimento> ListaMovimentos { get => listaMovimentos; set => listaMovimentos = value; }        
         public int QtdCidades { get => listaCidades.Count; }
         public List<Caminho> CaminhosEncontrados { get => caminhosEncontrados; set => caminhosEncontrados = value; }
-        public bool[] JaPassou { get => jaPassou; set => jaPassou = value; }
         public Movimento[,] MatrizAdjacencia { get => matrizAdjacencia; set => matrizAdjacencia = value; }
-        public bool SemSaida { get => semSaida; set => semSaida = value; }
         public CriterioMelhorCaminho Criterio { get => criterio; set => criterio = value; }
         public MetodoDeBusca Metodo { get => metodo; set => metodo = value; }
     }

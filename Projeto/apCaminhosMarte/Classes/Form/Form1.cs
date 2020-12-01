@@ -193,6 +193,7 @@ namespace apCaminhosMarte
             {
                 LimparPictureBox();
                 dgvMelhorCaminho.RowCount = 0;
+                lbTotalMenorPercurso.Text = "";
                 MessageBox.Show("Não foi encontrado nenhum caminho.");
             }
         }
