@@ -511,7 +511,7 @@
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmBuscaCaminhos";
-            this.Text = "Projeto 3 - busca de caminhos entre cidades";
+            this.Text = "Projeto 3 - Busca de caminhos entre cidades";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tpRotas.ResumeLayout(false);

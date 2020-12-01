@@ -24,8 +24,8 @@ namespace apCaminhosMarte.Classes.GPS.Dijkstra
 
             this.matrizAdjacenciaComPeso = new int[QtdCidades, QtdCidades];
 
-            for (int i = 0; i < matrizAdjacenciaComPeso.Length; i++)
-                for (int j = 0; j < matrizAdjacenciaComPeso.Length; j++)
+            for (int i = 0; i < matrizAdjacenciaComPeso.GetLength(0); i++)
+                for (int j = 0; j < matrizAdjacenciaComPeso.GetLength(0); j++)
                 {
                     if(MatrizAdjacencia[i,j] == null)
                         matrizAdjacenciaComPeso[i, j] = infinity; // define todos os valores da matriz de adjacencia pra infinity
@@ -120,13 +120,23 @@ namespace apCaminhosMarte.Classes.GPS.Dijkstra
             int onde = idCidadeDestino;
             PilhaLista<Movimento> pilhaMovimentos = new PilhaLista<Movimento>();
 
-            while (onde != idCidadeDestino)
+            while (onde != idCidadeOrigem)
             {
-                onde = percursos[onde].verticePai;
-                pilhaMovimentos.Empilhar(MatrizAdjacencia[vertices[onde].Cidade.Id, vertices[percursos[onde].verticePai].Cidade.Id]);
+                pilhaMovimentos.Empilhar(MatrizAdjacencia[vertices[percursos[onde].verticePai].Cidade.Id, vertices[onde].Cidade.Id]);
+                onde = percursos[onde].verticePai;                
             }
 
-            caminhoEncontrado.Add(new Caminho(pilhaMovimentos));
+            if (pilhaMovimentos.Tamanho > 1)
+            {
+                PilhaLista<Movimento> pilhaMovimentosInvertido = new PilhaLista<Movimento>();
+                for (int i = pilhaMovimentos.Tamanho - 1; !pilhaMovimentos.EstaVazia; i--) // exibe cada movimento do melhor caminho
+                {
+                    Movimento mov = pilhaMovimentos.Desempilhar();
+                    pilhaMovimentosInvertido.Empilhar(mov);
+                }
+                caminhoEncontrado.Add(new Caminho(pilhaMovimentosInvertido));
+            }            
+
             return caminhoEncontrado;
         }
 

@@ -19,7 +19,7 @@ namespace apCaminhosMarte
          */
         public static Arvore<Cidade> LerCidades()
         {
-            StreamReader leitorDeArquivos = new StreamReader("CidadesMarte.txt");
+            StreamReader leitorDeArquivos = new StreamReader("CidadesMarte.txt", Encoding.GetEncoding("iso-8859-1"));
             Arvore<Cidade> arvore = new Arvore<Cidade>();
 
             while (!leitorDeArquivos.EndOfStream)
@@ -41,7 +41,7 @@ namespace apCaminhosMarte
          */ 
         public static List<Movimento> LerMovimentos()
         {
-            StreamReader leitorDeArquivos = new StreamReader("CaminhosEntreCidadesMarte.txt");
+            StreamReader leitorDeArquivos = new StreamReader("CaminhosEntreCidadesMarte.txt", Encoding.GetEncoding("iso-8859-1"));
             List<Movimento> listaMovimentos = new List<Movimento>();
             while (!leitorDeArquivos.EndOfStream)
             {

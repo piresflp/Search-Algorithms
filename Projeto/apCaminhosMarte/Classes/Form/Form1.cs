@@ -87,13 +87,13 @@ namespace apCaminhosMarte
                 if (cidade.Nome.Equals(cidadeOrigem))
                     idCidadeOrigem = cidade.Id;
 
-                else if (cidade.Nome == cidadeDestino)
+                else if (cidade.Nome.Equals(cidadeDestino))
                     idCidadeDestino = cidade.Id;
 
                 if (idCidadeOrigem != -1 && idCidadeDestino != -1) // se o Id de ambas cidades já foram encontrados
                     break; // sai do foreach
             }
-            if (idCidadeOrigem == -1 && idCidadeDestino == -1)
+            if (idCidadeOrigem == -1 || idCidadeDestino == -1)
                 throw new Exception("Erro ao descobrir Id de alguma das cidades selecionadas.");
         }
 
